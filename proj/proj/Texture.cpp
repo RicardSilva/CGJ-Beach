@@ -39,11 +39,8 @@ namespace engine {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture);
 		image = SOIL_load_image("sample.png", &width, &height, 0, SOIL_LOAD_RGB);
-		float pixels[] = {
-			0.0f, 0.0f, 0.0f,   1.0f, 1.0f, 1.0f,
-			1.0f, 1.0f, 1.0f,   0.0f, 0.0f, 0.0f
-		};
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_FLOAT, pixels);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 
 		glUniform1i(shader->GetUniformLocation("Texture"), 0);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
