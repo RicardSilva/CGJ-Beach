@@ -85,6 +85,7 @@ void checkOpenGLError(std::string error)
 {
 	if (isOpenGLError()) {
 		std::cerr << error << std::endl;
+		getchar();
 		exit(EXIT_FAILURE);
 	}
 }
@@ -111,6 +112,13 @@ void createShaderProgram(std::string& vs_file, std::string& fs_file)
 	ShaderManager::instance()->addShader("shader", shader);
 
 	checkOpenGLError("ERROR: Could not create shaders.");
+}
+
+void createTexture() {
+	texture = new Texture();
+	texture->setShader(shader);
+	texture->create();
+	checkOpenGLError("ERROR: Could not create textures.");
 }
 
 void destroyShaderProgram()
@@ -164,13 +172,6 @@ void drawScene()
 	scene->draw();
 	checkOpenGLError("ERROR: Could not draw scene.");
 }
-
-void createTextures()
-{
-	texture->setShader(shader);
-	texture->create();
-}
-
 
 
 /////////////////////////////////////////////////////////////////////// CALLBACKS
@@ -357,7 +358,7 @@ void init(int argc, char* argv[])
 	createShaderProgram(std::string("VerticeShader.glsl"),
 		std::string("FragmentShader.glsl"));
 	createScene();
-	createTextures();
+	createTexture();
 	setupCallbacks();
 }
 

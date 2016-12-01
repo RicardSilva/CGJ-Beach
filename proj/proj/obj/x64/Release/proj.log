@@ -1,3 +1,8 @@
-﻿Texture.obj : error LNK2001: unresolved external symbol SOIL_free_image_data
-Texture.obj : error LNK2001: unresolved external symbol SOIL_load_image
-C:\Users\MacbookAir\Documents\GitHub\CGJ_TeamProject\proj\proj\\bin\x64\Release\proj.exe : fatal error LNK1120: 2 unresolved externals
+﻿  Texture.cpp
+  Generating code
+  29 of 914 functions ( 3.2%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    6 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  proj.vcxproj -> C:\Users\MacbookAir\Documents\GitHub\CGJ_TeamProject\proj\proj\\bin\x64\Release\proj.exe
+  proj.vcxproj -> C:\Users\MacbookAir\Documents\GitHub\CGJ_TeamProject\proj\proj\\bin\x64\Release\proj.pdb (Full PDB)

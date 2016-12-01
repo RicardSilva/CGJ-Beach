@@ -2,7 +2,7 @@
 
 #include "GL/glew.h"
 #include "GL/freeglut.h"
-#include "SOIL.h"
+#include <SOIL.h>
 #include "Shader.h"
 
 namespace engine {
@@ -10,7 +10,7 @@ namespace engine {
 	class Texture
 	{
 		GLuint texture;
-		GLuint shaderProgram;
+		Shader *shader;
 
 	public:
 		void setShader(Shader* shader);

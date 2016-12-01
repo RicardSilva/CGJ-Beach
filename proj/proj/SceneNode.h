@@ -1,6 +1,7 @@
 #pragma once
 #include "engine.h"
 #include <vector>
+#include "Texture.h"
 
 using namespace std;
 
@@ -12,9 +13,11 @@ namespace engine {
 		mat4 matrix;
 		vec3 color;
 		Shader *shader;
+		Texture *texture;
+
 		vector<SceneNode*> nodes;
 
-		GLint viewId, projID, modelID, colorID;
+		GLint viewId, projID, modelID, colorID, textureID;
 
 	public:
 
@@ -36,11 +39,13 @@ namespace engine {
 			projID = s->GetUniformLocation("ProjectionMatrix");
 			modelID = s->GetUniformLocation("ModelMatrix");
 			colorID = s->GetUniformLocation("Color");
+				
 		}
 		Shader *getShader() { return shader; }
 
 		void draw(mat4 &viewMatrix, mat4 &projMatrix, mat4 &modelMatrix) {
 			//draw this
+
 			if (mesh != nullptr) {
 
 				shader->Use();
@@ -48,10 +53,10 @@ namespace engine {
 				glUniformMatrix4fv(projID, 1, GL_FALSE, projMatrix.Transposed().Export());
 				glUniformMatrix4fv(modelID, 1, GL_FALSE, (modelMatrix * matrix).Transposed().Export());
 				glUniform3fv(colorID, 1, color.Export());
-				
-				mesh->draw();
 
+				mesh->draw();
 				shader->UnUse();
+
 			}
 			//draw children
 			for (auto node : nodes)
