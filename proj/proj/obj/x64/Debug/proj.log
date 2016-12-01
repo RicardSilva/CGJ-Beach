@@ -1,0 +1,37 @@
+﻿Build started 18/11/2016 12:44:02.
+     1>Project "C:\Users\Ricardo Silva\Desktop\CGJ\proj\proj\proj.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /I"C:\Users\Ricardo Silva\Desktop\CGJ\proj\..\dependencies\freeglut\include" /I"C:\Users\Ricardo Silva\Desktop\CGJ\proj\..\dependencies\glew\include" /ZI /nologo /W3 /WX- /sdl /Od /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"C:\Users\Ricardo Silva\Desktop\CGJ\proj\proj\\obj\x64\Debug\\" /Fd"C:\Users\Ricardo Silva\Desktop\CGJ\proj\proj\\obj\x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt main.cpp
+         main.cpp
+     1>c:\users\ricardo silva\desktop\cgj\proj\proj\main.cpp(129): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>c:\users\ricardo silva\desktop\cgj\proj\proj\main.cpp(147): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>c:\users\ricardo silva\desktop\cgj\proj\proj\main.cpp(149): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>c:\users\ricardo silva\desktop\cgj\proj\proj\main.cpp(153): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>c:\users\ricardo silva\desktop\cgj\proj\proj\main.cpp(155): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>c:\users\ricardo silva\desktop\cgj\proj\proj\main.cpp(159): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>c:\users\ricardo silva\desktop\cgj\proj\proj\main.cpp(166): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>c:\users\ricardo silva\desktop\cgj\proj\proj\main.cpp(171): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>c:\users\ricardo silva\desktop\cgj\proj\proj\main.cpp(181): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>c:\users\ricardo silva\desktop\cgj\proj\proj\main.cpp(214): warning C4305: '+=': truncation from 'double' to 'float'
+     1>c:\users\ricardo silva\desktop\cgj\proj\proj\main.cpp(216): warning C4305: '-=': truncation from 'double' to 'float'
+     1>c:\users\ricardo silva\desktop\cgj\proj\proj\main.cpp(231): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+     1>c:\users\ricardo silva\desktop\cgj\proj\proj\main.cpp(297): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>c:\users\ricardo silva\desktop\cgj\proj\proj\main.cpp(300): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>c:\users\ricardo silva\desktop\cgj\proj\proj\main.cpp(303): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>c:\users\ricardo silva\desktop\cgj\proj\proj\main.cpp(306): warning C4305: 'argument': truncation from 'double' to 'float'
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Ricardo Silva\Desktop\CGJ\proj\proj\\bin\x64\Debug\proj.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Ricardo Silva\Desktop\CGJ\proj\\..\dependencies\freeglut\lib\x64" /LIBPATH:"C:\Users\Ricardo Silva\Desktop\CGJ\proj\\..\dependencies\glew\lib\release\x64" glew32.lib freeglut.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Ricardo Silva\Desktop\CGJ\proj\proj\\bin\x64\Debug\proj.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Ricardo Silva\Desktop\CGJ\proj\proj\\bin\x64\Debug\proj.lib" /MACHINE:X64 "C:\Users\Ricardo Silva\Desktop\CGJ\proj\proj\\obj\x64\Debug\Camera.obj"
+         "C:\Users\Ricardo Silva\Desktop\CGJ\proj\proj\\obj\x64\Debug\OrthogonalCamera.obj"
+         "C:\Users\Ricardo Silva\Desktop\CGJ\proj\proj\\obj\x64\Debug\PerspectiveCamera.obj"
+         "C:\Users\Ricardo Silva\Desktop\CGJ\proj\proj\\obj\x64\Debug\qtrn.obj"
+         "C:\Users\Ricardo Silva\Desktop\CGJ\proj\proj\\obj\x64\Debug\Shader.obj"
+         "C:\Users\Ricardo Silva\Desktop\CGJ\proj\proj\\obj\x64\Debug\main.obj"
+         "C:\Users\Ricardo Silva\Desktop\CGJ\proj\proj\\obj\x64\Debug\mat.obj"
+         "C:\Users\Ricardo Silva\Desktop\CGJ\proj\proj\\obj\x64\Debug\OldMain.obj"
+         "C:\Users\Ricardo Silva\Desktop\CGJ\proj\proj\\obj\x64\Debug\vec.obj"
+         proj.vcxproj -> C:\Users\Ricardo Silva\Desktop\CGJ\proj\proj\\bin\x64\Debug\proj.exe
+     1>Done Building Project "C:\Users\Ricardo Silva\Desktop\CGJ\proj\proj\proj.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.32
