@@ -31,13 +31,11 @@
 
 #include <vector>
 
-#include "mat.h"
-#include "Mesh.h"
-#include "Shader.h"
 #include "engine.h"
 
 #include "GL/glew.h"
 #include "GL/freeglut.h"
+
 
 #define CAPTION "Loading World"
 using namespace engine;
@@ -63,6 +61,7 @@ qtrn quat = qtrn::qFromAngleAxis(0, vec4(0, 1, 0, 0));
 
 SceneGraph* scene;
 Shader* shader;
+Texture* texture;
 
 ShaderManager *ShaderManager::_instance = nullptr;
 SceneGraphManager *SceneGraphManager::_instance = nullptr;
@@ -121,16 +120,22 @@ void destroyShaderProgram()
 	delete shader;
 }
 
+void destroyTextures()
+{
+	texture->destroyTextures();
+	checkOpenGLError("ERROR: Could not destroy textures.");
+	delete texture;
+}
+
+
 
 /////////////////////////////////////////////////////////////////////// SCENE
 void createScene() {
 	Camera *camera = new Camera();
 	camera->setViewMatrix(matFactory::Translate3(0,0,-CameraDistance) );
-	camera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX/WinY, 0.1, 15));
+	camera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX/WinY, 0.1f, 15));
 	scene = new SceneGraph(camera, shader);
 	checkOpenGLError("ERROR: Could not build scene.");
-
-	
 
 	Mesh* cubeMesh = new Mesh(std::string("cube.obj"));
 
@@ -148,11 +153,6 @@ void createScene() {
 	cube->setMesh(cubeMesh);
 	cube->setColor(vec3(1,0,0));
 	root->addNode(cube);
-
-
-
-	
-
 }
 
 void destroyScene() {
@@ -165,12 +165,19 @@ void drawScene()
 	checkOpenGLError("ERROR: Could not draw scene.");
 }
 
+void createTextures()
+{
+	texture->setShader(shader);
+	texture->create();
+}
+
 
 
 /////////////////////////////////////////////////////////////////////// CALLBACKS
 
 void cleanup()
 {
+	destroyTextures();
 	destroyShaderProgram();
 	destroyScene();	
 }
@@ -216,7 +223,6 @@ void myKeydown(unsigned char key, int x, int y) {
 		animate = !animate;
 		break;
 	}
-
 }
 
 void mouseWheel(int button, int dir, int x, int y)
@@ -240,7 +246,6 @@ void OnMouseDown(int button, int state, int x, int y) {
 		oldY = y;
 		rotated = true;
 	}
-
 }
 
 void OnMouseMove(int x, int y) {
@@ -252,7 +257,6 @@ void OnMouseMove(int x, int y) {
 		oldX = x;
 		oldY = y;
 
-
 		qtrn rotateX = qtrn::qFromAngleAxis(-key_pitch, vec4(1, 0, 0, 1));
 		qtrn rotateY = qtrn::qFromAngleAxis(-key_yaw, vec4(0, 1, 0, 1));
 		qtrn newQquat = rotateY * rotateX;
@@ -263,7 +267,6 @@ void OnMouseMove(int x, int y) {
 		mat4 rotate = qGLMatrix(quat);
 
 		scene->getCamera()->setViewMatrix (matFactory::Translate3(0, 0, -CameraDistance) * rotate);
-
 	}
 }
 
@@ -272,16 +275,16 @@ void SpecialInput(int key, int x, int y)
 	switch (key)
 	{
 	case GLUT_KEY_UP:
-		scene->root->setMatrix(matFactory::Translate3(0, 0.1, 0) * scene->root->getMatrix());
+		scene->root->setMatrix(matFactory::Translate3(0, 0.1f, 0) * scene->root->getMatrix());
 		break;
 	case GLUT_KEY_DOWN:
-		scene->root->setMatrix(matFactory::Translate3(0, -0.1, 0) * scene->root->getMatrix());
+		scene->root->setMatrix(matFactory::Translate3(0, -0.1f, 0) * scene->root->getMatrix());
 		break;
 	case GLUT_KEY_LEFT:
-		scene->root->setMatrix(matFactory::Translate3(-0.1, 0, 0) * scene->root->getMatrix());
+		scene->root->setMatrix(matFactory::Translate3(-0.1f, 0, 0) * scene->root->getMatrix());
 		break;
 	case GLUT_KEY_RIGHT:
-		scene->root->setMatrix(matFactory::Translate3(0.1, 0, 0) * scene->root->getMatrix());
+		scene->root->setMatrix(matFactory::Translate3(0.1f, 0, 0) * scene->root->getMatrix());
 		break;
 	}
 }
@@ -354,6 +357,7 @@ void init(int argc, char* argv[])
 	createShaderProgram(std::string("VerticeShader.glsl"),
 		std::string("FragmentShader.glsl"));
 	createScene();
+	createTextures();
 	setupCallbacks();
 }
 

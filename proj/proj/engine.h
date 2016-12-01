@@ -13,3 +13,4 @@
 #include "SceneNode.h"
 #include "SceneGraph.h"
 #include "SceneGraphManager.h"
+#include "Texture.h"

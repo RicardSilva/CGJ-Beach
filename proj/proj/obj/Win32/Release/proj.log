@@ -1,0 +1,13 @@
+﻿  Camera.cpp
+  OrthogonalCamera.cpp
+  PerspectiveCamera.cpp
+  qtrn.cpp
+  Shader.cpp
+c:\users\macbookair\documents\github\cgj_teamproject\proj\proj\Shader.h(2): fatal error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+  main.cpp
+c:\users\macbookair\documents\github\cgj_teamproject\proj\proj\Shader.h(2): fatal error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+  mat.cpp
+  OldMain.cpp
+  Texture.cpp
+c:\users\macbookair\documents\github\cgj_teamproject\proj\proj\Texture.h(3): fatal error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+  vec.cpp
