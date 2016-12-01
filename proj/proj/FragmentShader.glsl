@@ -17,7 +17,7 @@ void main(void)
 	//vec3 color = (exNormal + vec3(1.0)) * 0.5;
 	//FragmentColor = vec4(color,1.0);
 	
-	FragmentColor = texture2D(Texture, exTexcoord);
+	FragmentColor = texture(Texture, exTexcoord);
 
 	//FragmentColor = vec4(Color + exNormal * 0.4, 1.0);
 	
