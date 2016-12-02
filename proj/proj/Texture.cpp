@@ -24,7 +24,7 @@ namespace engine {
 		}
 	}
 
-	void Texture::Create()
+	void Texture::Create(std::string name)
 	{
 		glGenTextures(1, &texture);
 		int width, height;
@@ -33,7 +33,7 @@ namespace engine {
 		glActiveTexture(GL_TEXTURE0);
 
 		glBindTexture(GL_TEXTURE_2D, texture);
-		image = SOIL_load_image("sample.png", &width, &height, 0, SOIL_LOAD_RGB);
+		image = SOIL_load_image(name.c_str(), &width, &height, 0, SOIL_LOAD_RGB);
 
 		
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

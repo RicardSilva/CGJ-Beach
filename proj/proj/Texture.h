@@ -12,7 +12,7 @@ namespace engine {
 		GLuint texture;
 
 	public:
-		void Create();
+		void Create(std::string name);
 		void Destroy();
 
 		void Use() {

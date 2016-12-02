@@ -1,29 +1,3 @@
-///////////////////////////////////////////////////////////////////////
-//
-//  Loading OBJ mesh from external file
-//
-//	Final individual assignment:
-//	1.	Create classes: Scene, Camera and Mesh (that loads a
-//		mesh from a Wavefront OBJ file) and build a small
-//		scenegraph of your tangram scene (you may create more 
-//		classes if needed).
-//	2.	Create a ground object and couple the tangram figure
-//		to the ground. Press keys to move the ground about: 
-//		the tangram figure must follow the ground.
-//	3.	Animate between closed puzzle (initial square) and 
-//		tangram figure by pressing a key.
-//	4.	Spherical camera interaction through mouse. It should
-//		be possible to interact while animation is playing.
-//
-//	Team assignment:
-//	Pick your team (3 elements from one same lab) for the team
-//	assignment you will be working until the end of the semester,
-//	and register it online.
-//
-// (c) 2013-16 by Carlos Martinho
-//
-///////////////////////////////////////////////////////////////////////
-
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -44,7 +18,7 @@ int WinX = 640, WinY = 480;
 int WindowHandle = 0;
 unsigned int FrameCount = 0;
 
-float CameraDistance = 3;
+float CameraDistance = 5;
 
 
 int oldX, oldY;
@@ -113,10 +87,10 @@ void createShaderProgram(std::string& vs_file, std::string& fs_file)
 	checkOpenGLError("ERROR: Could not create shaders.");
 }
 
-void createTexture() {
+void createTexture(std::string name) {
 	texture = new Texture();
 	//texture->setShader(shader);
-	texture->Create();
+	texture->Create(name);
 	checkOpenGLError("ERROR: Could not create textures.");
 }
 
@@ -146,7 +120,7 @@ void createScene() {
 
 	Mesh* cubeMesh = new Mesh(std::string("cube_vtn.obj"));
 
-	SceneNode *root, *cube;
+	SceneNode *root, *cube, *cube2;
 
 	root = new SceneNode();
 	root->setMatrix(matFactory::Identity4());
@@ -155,13 +129,28 @@ void createScene() {
 	scene->setRoot(root);
 
 	cube = new SceneNode();
-	cube->setMatrix(matFactory::Identity4());
+//	cube->setMatrix(matFactory::Identity4());
+	cube->setMatrix(matFactory::Translate3(-1.5, 0, 0));
+		//* matFactory::Scale3(1.5,1.5,1.5));
 
+
+	createTexture("sample.png");
 	cube->setTexture(texture);
 	cube->setShader(shader);
 	cube->setMesh(cubeMesh);
 	cube->setColor(vec3(1,0,0));
 	root->addNode(cube);
+
+	cube2 = new SceneNode();
+//	cube2->setMatrix(matFactory::Identity4());
+	cube2->setMatrix(matFactory::Translate3(1.5, 0, 0));
+
+	createTexture("csample.png");
+	cube2->setTexture(texture);
+	cube2->setShader(shader);
+	cube2->setMesh(cubeMesh);
+	cube2->setColor(vec3(1, 0, 0));
+	root->addNode(cube2);
 }
 
 void destroyScene() {
@@ -359,7 +348,9 @@ void init(int argc, char* argv[])
 	createShaderProgram(std::string("VerticeShader.glsl"),
 		std::string("FragmentShader.glsl"));
 
-	createTexture();
+	//createTexture("sample.png");
+	//createTexture("csample.png");
+
 	createScene();
 	setupCallbacks();
 }
