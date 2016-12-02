@@ -32,6 +32,7 @@ namespace engine {
 		Mesh *getMesh() { return mesh; }
 
 		void setColor(vec3& v) { color = v; }
+		void setTexture(Texture* t) { texture = t; }
 
 		void setShader(Shader* s) { 
 			shader = s; 
@@ -39,6 +40,15 @@ namespace engine {
 			projID = s->GetUniformLocation("ProjectionMatrix");
 			modelID = s->GetUniformLocation("ModelMatrix");
 			colorID = s->GetUniformLocation("Color");
+			textureID = s->GetUniformLocation("Texture");
+			shader->Use();
+			glUniform3fv(colorID, 1, color.Export());
+			if (texture != nullptr) {
+				texture->Use();
+				glUniform1i(textureID, 0);
+				texture->UnUse();
+			}
+			shader->UnUse();
 				
 		}
 		Shader *getShader() { return shader; }
@@ -52,9 +62,12 @@ namespace engine {
 				glUniformMatrix4fv(viewId, 1, GL_FALSE, viewMatrix.Transposed().Export());
 				glUniformMatrix4fv(projID, 1, GL_FALSE, projMatrix.Transposed().Export());
 				glUniformMatrix4fv(modelID, 1, GL_FALSE, (modelMatrix * matrix).Transposed().Export());
-				glUniform3fv(colorID, 1, color.Export());
-
+				if (texture != nullptr){
+					texture->Use();
+				}
 				mesh->draw();
+
+				texture->UnUse();
 				shader->UnUse();
 
 			}

@@ -46,8 +46,7 @@ unsigned int FrameCount = 0;
 
 float CameraDistance = 3;
 
-float k = 0;
-bool animate = false;
+
 int oldX, oldY;
 bool rotated = false;
 
@@ -57,7 +56,7 @@ float mouseX, mouseY;
 float prevX, prevY;
 float key_yaw, key_pitch;
 
-qtrn quat = qtrn::qFromAngleAxis(0, vec4(0, 1, 0, 0));
+qtrn quat = qtrn::qFromAngleAxis(0, vec4(0, 0, 1, 0));
 
 SceneGraph* scene;
 Shader* shader;
@@ -116,8 +115,8 @@ void createShaderProgram(std::string& vs_file, std::string& fs_file)
 
 void createTexture() {
 	texture = new Texture();
-	texture->setShader(shader);
-	texture->create();
+	//texture->setShader(shader);
+	texture->Create();
 	checkOpenGLError("ERROR: Could not create textures.");
 }
 
@@ -130,7 +129,7 @@ void destroyShaderProgram()
 
 void destroyTextures()
 {
-	texture->destroyTextures();
+	texture->Destroy();
 	checkOpenGLError("ERROR: Could not destroy textures.");
 	delete texture;
 }
@@ -145,7 +144,7 @@ void createScene() {
 	scene = new SceneGraph(camera, shader);
 	checkOpenGLError("ERROR: Could not build scene.");
 
-	Mesh* cubeMesh = new Mesh(std::string("cube.obj"));
+	Mesh* cubeMesh = new Mesh(std::string("cube_vtn.obj"));
 
 	SceneNode *root, *cube;
 
@@ -156,7 +155,9 @@ void createScene() {
 	scene->setRoot(root);
 
 	cube = new SceneNode();
-	cube->setMatrix(matFactory::Translate3(-0.5, -0.5, 0));
+	cube->setMatrix(matFactory::Identity4());
+
+	cube->setTexture(texture);
 	cube->setShader(shader);
 	cube->setMesh(cubeMesh);
 	cube->setColor(vec3(1,0,0));
@@ -221,7 +222,7 @@ void myKeydown(unsigned char key, int x, int y) {
 	key = tolower(key);
 	switch (key) {
 	case('g') :
-		animate = !animate;
+		
 		break;
 	}
 }
@@ -357,8 +358,9 @@ void init(int argc, char* argv[])
 
 	createShaderProgram(std::string("VerticeShader.glsl"),
 		std::string("FragmentShader.glsl"));
-	createScene();
+
 	createTexture();
+	createScene();
 	setupCallbacks();
 }
 

@@ -10,12 +10,17 @@ namespace engine {
 	class Texture
 	{
 		GLuint texture;
-		Shader *shader;
 
 	public:
-		void setShader(Shader* shader);
-		void create();
-		void destroyTextures();
+		void Create();
+		void Destroy();
+
+		void Use() {
+			glBindTexture(GL_TEXTURE_2D, texture);
+		}
+		void UnUse() {
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
 	};
 
 }
