@@ -46,13 +46,10 @@ namespace engine {
 		
 		glBindTexture(GL_TEXTURE_2D, 0);
 		SOIL_free_image_data(image);
+		checkOpenGLError("ERROR: Could not create texture: " + name);
 
 	}
 
 
-	void Texture::Destroy()
-	{
-		glDeleteTextures(1, &texture);
-	}
 
 }

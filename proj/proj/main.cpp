@@ -33,12 +33,10 @@ float key_yaw, key_pitch;
 qtrn quat = qtrn::qFromAngleAxis(0, vec4(0, 0, 1, 0));
 
 SceneGraph* scene;
-Shader* shader;
-Texture* texture;
+//Shader* shader;
+//Texture* texture;
 
-ShaderManager *ShaderManager::_instance = nullptr;
-SceneGraphManager *SceneGraphManager::_instance = nullptr;
-MeshManager *MeshManager::_instance = nullptr;
+//ShaderManager *ShaderManager::_instance = nullptr;
 
 /////////////////////////////////////////////////////////////////////// ERRORS
 
@@ -63,51 +61,55 @@ void checkOpenGLError(std::string error)
 	}
 }
 
-void createShaderProgram(std::string& vs_file, std::string& fs_file)
+void createShaders()
 {
+	//cubeShader
+	Shader *cubeShader = new Shader();
+	cubeShader->LoadFromFile(GL_VERTEX_SHADER, "VerticeShader.glsl");
+	cubeShader->LoadFromFile(GL_FRAGMENT_SHADER, "FragmentShader.glsl");
 
-	shader = new Shader();
-	shader->LoadFromFile(GL_VERTEX_SHADER, vs_file);
-	shader->LoadFromFile(GL_FRAGMENT_SHADER, fs_file);
+	cubeShader->CreateProgram();
 
-	shader->CreateProgram();
+	cubeShader->BindAttributeLocation(VERTICES, "inPosition");
+	cubeShader->BindAttributeLocation(TEXCOORDS, "inTexcoord");
+	cubeShader->BindAttributeLocation(NORMALS, "inNormal");
 
-	shader->BindAttributeLocation(VERTICES, "inPosition");
-	//if (mesh->areTexcoordsLoaded())
-		shader->BindAttributeLocation(TEXCOORDS, "inTexcoord");
-	//if (mesh->areNormalsLoaded())
-		shader->BindAttributeLocation(NORMALS, "inNormal");
-
-	shader->LinkProgram();
+	cubeShader->LinkProgram();
 
 	//ModelMatrix_UId = shader->GetUniformLocation("ModelMatrix");
 	//UboId = shader->GetUniformBlockIndex("SharedMatrices");
-	ShaderManager::instance()->addShader("shader", shader);
+	ShaderManager::Instance()->AddShader("cubeShader", cubeShader);
 
 	checkOpenGLError("ERROR: Could not create shaders.");
 }
+void destroyShaders()
+{
+	ShaderManager::Instance()->Destroy();
+	checkOpenGLError("ERROR: Could not destroy shaders.");
+}
 
-void createTexture(std::string name) {
-	texture = new Texture();
-	//texture->setShader(shader);
-	texture->Create(name);
+void createTextures() {
+	Texture *dogTexture = new Texture("sample.png");
+	TextureManager::Instance()->AddTexture("dog", dogTexture);
+	Texture *catTexture = new Texture("csample.png");
+	TextureManager::Instance()->AddTexture("cat", catTexture);
+
 	checkOpenGLError("ERROR: Could not create textures.");
 }
-
-void destroyShaderProgram()
-{
-    shader->DeleteProgram();
-	checkOpenGLError("ERROR: Could not destroy shaders.");
-	delete shader;
-}
-
 void destroyTextures()
 {
-	texture->Destroy();
+	TextureManager::Instance()->Destroy();
 	checkOpenGLError("ERROR: Could not destroy textures.");
-	delete texture;
 }
 
+void createMeshes() {
+	Mesh* cubeMesh = new Mesh(std::string("cube_vtn.obj"));
+	MeshManager::Instance()->AddMesh("cube", cubeMesh);
+	checkOpenGLError("ERROR: Could not create meshes.");
+}
+void destroyMeshes() {
+	MeshManager::Instance()->Destroy();
+}
 
 
 /////////////////////////////////////////////////////////////////////// SCENE
@@ -115,46 +117,39 @@ void createScene() {
 	Camera *camera = new Camera();
 	camera->setViewMatrix(matFactory::Translate3(0,0,-CameraDistance) );
 	camera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX/WinY, 0.1f, 15));
-	scene = new SceneGraph(camera, shader);
-	checkOpenGLError("ERROR: Could not build scene.");
-
-	Mesh* cubeMesh = new Mesh(std::string("cube_vtn.obj"));
+	scene = new SceneGraph(camera, ShaderManager::Instance()->GetShader("cubeShader"));
 
 	SceneNode *root, *cube, *cube2;
 
 	root = new SceneNode();
 	root->setMatrix(matFactory::Identity4());
-	root->setShader(shader);
+	root->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	root->setColor(vec3(0, 0, 0));
 	scene->setRoot(root);
 
 	cube = new SceneNode();
-//	cube->setMatrix(matFactory::Identity4());
 	cube->setMatrix(matFactory::Translate3(-1.5, 0, 0));
-		//* matFactory::Scale3(1.5,1.5,1.5));
 
-
-	createTexture("sample.png");
-	cube->setTexture(texture);
-	cube->setShader(shader);
-	cube->setMesh(cubeMesh);
+	cube->setTexture(TextureManager::Instance()->GetTexture("dog"));
+	cube->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
+	cube->setMesh(MeshManager::Instance()->GetMesh("cube"));
 	cube->setColor(vec3(1,0,0));
 	root->addNode(cube);
 
 	cube2 = new SceneNode();
-//	cube2->setMatrix(matFactory::Identity4());
 	cube2->setMatrix(matFactory::Translate3(1.5, 0, 0));
-
-	createTexture("csample.png");
-	cube2->setTexture(texture);
-	cube2->setShader(shader);
-	cube2->setMesh(cubeMesh);
+	cube2->setTexture(TextureManager::Instance()->GetTexture("cat"));
+	cube2->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
+	cube2->setMesh(MeshManager::Instance()->GetMesh("cube"));
 	cube2->setColor(vec3(1, 0, 0));
 	root->addNode(cube2);
+
+
+	checkOpenGLError("ERROR: Could not build scene.");
 }
 
 void destroyScene() {
-	
+	delete(scene);
 }
 
 void drawScene()
@@ -168,8 +163,9 @@ void drawScene()
 
 void cleanup()
 {
+	destroyMeshes();
 	destroyTextures();
-	destroyShaderProgram();
+	destroyShaders();
 	destroyScene();	
 }
 
@@ -345,12 +341,9 @@ void init(int argc, char* argv[])
 	setupGLEW();
 	setupOpenGL();
 
-	createShaderProgram(std::string("VerticeShader.glsl"),
-		std::string("FragmentShader.glsl"));
-
-	//createTexture("sample.png");
-	//createTexture("csample.png");
-
+	createShaders();
+	createMeshes();
+	createTextures();
 	createScene();
 	setupCallbacks();
 }

@@ -12,8 +12,12 @@ namespace engine {
 		GLuint texture;
 
 	public:
-		void Create(std::string name);
-		void Destroy();
+		Texture(std::string name) {
+			Create(name);
+		}
+		virtual ~Texture() {
+			glDeleteTextures(1, &texture);
+		}
 
 		void Use() {
 			glBindTexture(GL_TEXTURE_2D, texture);
@@ -21,6 +25,8 @@ namespace engine {
 		void UnUse() {
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
+
+		void Create(std::string name);
 	};
 
 }

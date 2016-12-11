@@ -3,6 +3,7 @@
 #include <vector>
 #include "Texture.h"
 
+
 using namespace std;
 
 namespace engine {
@@ -21,10 +22,11 @@ namespace engine {
 
 	public:
 
-		SceneNode() {
-
+		SceneNode() {}
+		virtual ~SceneNode() {
+			for (auto node : nodes)
+				delete(node);
 		}
-
 		void setMatrix(mat4 &m) { matrix = m; }
 		mat4 getMatrix() { return matrix; }
 

@@ -11,9 +11,8 @@ namespace engine {
 		Camera* camera;
 		Shader* shader;
 		SceneNode* root;
+		SceneNode* skyBox;
 
-		//SceneNode *ground, *base, *ST1, *ST2, *MT, *BT1, *BT2, *S, *P;
-		SceneNode *cube;
 
 	
 		SceneGraph(Camera *camera, Shader *shader)
@@ -21,7 +20,11 @@ namespace engine {
 			this->setCamera(camera);
 			this->setShader(shader);
 		}
-
+		virtual ~SceneGraph() {
+			delete(camera);
+			delete(root);
+			delete(skyBox);
+		}
 		void setCamera(Camera *c) { camera = c; }
 		Camera* getCamera() { return camera; }
 
@@ -31,8 +34,8 @@ namespace engine {
 		void setRoot(SceneNode *r) { root = r; }
 		SceneNode *getRoot() { return root; }
 
-
-		
+		void setSkyBox(SceneNode *s) { skyBox = s; }
+		SceneNode *getSkyBox() { return skyBox; }
 
 
 		void draw() {
