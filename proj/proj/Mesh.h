@@ -147,6 +147,7 @@ namespace engine {
 		void createBufferObjects()
 		{
 			glGenVertexArrays(1, &VaoId);
+
 			glBindVertexArray(VaoId);
 			{
 				glGenBuffers(1, &VboVertices);
@@ -154,6 +155,7 @@ namespace engine {
 				glBufferData(GL_ARRAY_BUFFER, Vertices.size() * sizeof(Vertex), &Vertices[0], GL_STATIC_DRAW);
 				glEnableVertexAttribArray(VERTICES);
 				glVertexAttribPointer(VERTICES, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+
 			}
 			if (TexcoordsLoaded)
 			{

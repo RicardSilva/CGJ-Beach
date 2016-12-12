@@ -36,7 +36,8 @@ SceneGraph* scene;
 Shader* shader, *skyboxShader;
 Texture* texture;
 SkyboxTexture* skyboxTexture;
-
+GLuint UBO_BP=0;
+GLint UboID;
 
 //ShaderManager *ShaderManager::_instance = nullptr;
 
@@ -79,7 +80,7 @@ void createShaders()
 	cubeShader->LinkProgram();
 
 	//ModelMatrix_UId = shader->GetUniformLocation("ModelMatrix");
-	//UboId = shader->GetUniformBlockIndex("SharedMatrices");
+	
 	ShaderManager::Instance()->AddShader("cubeShader", cubeShader);
 
 	skyboxShader = new Shader();
@@ -174,9 +175,6 @@ void createScene() {
 
 	skyboxTexture = new SkyboxTexture();
 	skyboxTexture->Create(faces);
-	if (skyboxTexture != nullptr) {
-		cout << "texture present" << endl;
-	}
 	skybox->setSkybox(skyboxTexture);
 	skybox->setShaderSkybox(ShaderManager::Instance()->GetShader("skyboxShader"));
 	skybox->setMesh(MeshManager::Instance()->GetMesh("cube"));

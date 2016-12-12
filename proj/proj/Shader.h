@@ -19,7 +19,9 @@ namespace engine {
 		void LinkProgram();
 		void Use();
 		void UnUse();
-
+		GLuint GetProgram(){
+			return program;
+		}
 		void BindUniformLocation(GLint location, const GLchar* source);
 		void BindAttributeLocation(GLint location, const GLchar* source);
 		void BindUniformBlock(GLuint uniformBlockIndex, GLuint uniformBlockBinding);
