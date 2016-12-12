@@ -2,7 +2,7 @@
 #include "Mesh.h"
 #include <map>
 
-using namespace std;
+
 namespace engine {
 
 	class MeshManager {
@@ -10,23 +10,18 @@ namespace engine {
 	private:
 		static MeshManager *_instance;
 		map<string, Mesh*> map;
+		MeshManager() {};
+		MeshManager(MeshManager const&) {};
+		MeshManager& operator=(MeshManager const&) {};
 
 
 	public:
 
-		void addMesh(const string& name, Mesh *mesh) {
-			map.insert(make_pair(name, mesh));
-		}
+		void AddMesh(const string& name, Mesh *mesh);
+		Mesh *GetMesh(const string& name);
 
-		Mesh *getMesh(const string& name) {
-			return map[name];
-		}
-
-		static MeshManager *instance() {
-			if (_instance == nullptr)
-				_instance = new MeshManager();
-			return _instance;
-		}
+		static MeshManager *Instance();
+		void Destroy();
 
 
 	};

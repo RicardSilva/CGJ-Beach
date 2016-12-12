@@ -37,9 +37,8 @@ Shader* shader, *skyboxShader;
 Texture* texture;
 SkyboxTexture* skyboxTexture;
 
-ShaderManager *ShaderManager::_instance = nullptr;
-SceneGraphManager *SceneGraphManager::_instance = nullptr;
-MeshManager *MeshManager::_instance = nullptr;
+
+//ShaderManager *ShaderManager::_instance = nullptr;
 
 /////////////////////////////////////////////////////////////////////// ERRORS
 
@@ -64,74 +63,70 @@ void checkOpenGLError(std::string error)
 	}
 }
 
-void createShaderProgram(std::string& vs_file, std::string& fs_file)
+void createShaders()
 {
+	//cubeShader
+	Shader *cubeShader = new Shader();
+	cubeShader->LoadFromFile(GL_VERTEX_SHADER, "VerticeShader.glsl");
+	cubeShader->LoadFromFile(GL_FRAGMENT_SHADER, "FragmentShader.glsl");
 
-	shader = new Shader();
-	shader->LoadFromFile(GL_VERTEX_SHADER, vs_file);
-	shader->LoadFromFile(GL_FRAGMENT_SHADER, fs_file);
+	cubeShader->CreateProgram();
 
-	shader->CreateProgram();
+	cubeShader->BindAttributeLocation(VERTICES, "inPosition");
+	cubeShader->BindAttributeLocation(TEXCOORDS, "inTexcoord");
+	cubeShader->BindAttributeLocation(NORMALS, "inNormal");
 
-	shader->BindAttributeLocation(VERTICES, "inPosition");
-	//if (mesh->areTexcoordsLoaded())
-		shader->BindAttributeLocation(TEXCOORDS, "inTexcoord");
-	//if (mesh->areNormalsLoaded())
-		shader->BindAttributeLocation(NORMALS, "inNormal");
-
-	shader->LinkProgram();
+	cubeShader->LinkProgram();
 
 	//ModelMatrix_UId = shader->GetUniformLocation("ModelMatrix");
 	//UboId = shader->GetUniformBlockIndex("SharedMatrices");
-	ShaderManager::instance()->addShader("shader", shader);
-
-	checkOpenGLError("ERROR: Could not create shaders.");
-}
-
-void createSkyboxShaderProgram(std::string& vs_file, std::string& fs_file)
-{
+	ShaderManager::Instance()->AddShader("cubeShader", cubeShader);
 
 	skyboxShader = new Shader();
-	skyboxShader->LoadFromFile(GL_VERTEX_SHADER, vs_file);
-	skyboxShader->LoadFromFile(GL_FRAGMENT_SHADER, fs_file);
+	skyboxShader->LoadFromFile(GL_VERTEX_SHADER, "VerticeShaderSkybox.glsl");
+	skyboxShader->LoadFromFile(GL_FRAGMENT_SHADER, "FragmentShaderSkybox.glsl");
 
 	skyboxShader->CreateProgram();
 
 	skyboxShader->BindAttributeLocation(VERTICES, "inPosition");
-	//if (mesh->areTexcoordsLoaded())
 	skyboxShader->BindAttributeLocation(TEXCOORDS, "inTexcoord");
-	//if (mesh->areNormalsLoaded())
 	skyboxShader->BindAttributeLocation(NORMALS, "inNormal");
 
 	skyboxShader->LinkProgram();
-
-	//ModelMatrix_UId = shader->GetUniformLocation("ModelMatrix");
-	//UboId = shader->GetUniformBlockIndex("SharedMatrices");
-	ShaderManager::instance()->addShader("skyboxShader", skyboxShader);
+	ShaderManager::Instance()->AddShader("skyboxShader", skyboxShader);
 
 	checkOpenGLError("ERROR: Could not create shaders.");
 }
-void createTexture(std::string name) {
-	texture = new Texture();
-	//texture->setShader(shader);
-	texture->Create(name);
+
+
+void destroyShaders()
+{
+	ShaderManager::Instance()->Destroy();
+	checkOpenGLError("ERROR: Could not destroy shaders.");
+}
+
+void createTextures() {
+	Texture *dogTexture = new Texture("sample.png");
+	TextureManager::Instance()->AddTexture("dog", dogTexture);
+	Texture *catTexture = new Texture("csample.png");
+	TextureManager::Instance()->AddTexture("cat", catTexture);
+
 	checkOpenGLError("ERROR: Could not create textures.");
 }
-
-void destroyShaderProgram()
-{
-    shader->DeleteProgram();
-	checkOpenGLError("ERROR: Could not destroy shaders.");
-	delete shader;
-}
-
 void destroyTextures()
 {
-	texture->Destroy();
+	TextureManager::Instance()->Destroy();
 	checkOpenGLError("ERROR: Could not destroy textures.");
-	delete texture;
 }
 
+void createMeshes() {
+	Mesh* cubeMesh = new Mesh(std::string("cube_vtn.obj"));
+	MeshManager::Instance()->AddMesh("cube", cubeMesh);
+	checkOpenGLError("ERROR: Could not create meshes.");
+}
+void destroyMeshes() {
+	MeshManager::Instance()->Destroy();
+}
 
 
 /////////////////////////////////////////////////////////////////////// SCENE
@@ -139,46 +134,35 @@ void createScene() {
 	Camera *camera = new Camera();
 	camera->setViewMatrix(matFactory::Translate3(0,0,-CameraDistance) );
 	camera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX/WinY, 0.1f, 15));
-	scene = new SceneGraph(camera, shader);
-	checkOpenGLError("ERROR: Could not build scene.");
-
-	Mesh* cubeMesh = new Mesh(std::string("cube_vtn.obj"));
+	scene = new SceneGraph(camera, ShaderManager::Instance()->GetShader("cubeShader"));
 
 	SceneNode *root, *cube, *cube2, *skybox;
 
 	root = new SceneNode();
 	root->setMatrix(matFactory::Identity4());
-	root->setShader(shader);
+	root->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	root->setColor(vec3(0, 0, 0));
 	scene->setRoot(root);
 
 	cube = new SceneNode();
-//	cube->setMatrix(matFactory::Identity4());
 	cube->setMatrix(matFactory::Translate3(-1.5, 0, 0));
-		//* matFactory::Scale3(1.5,1.5,1.5));
 
-
-	createTexture("sample.png");
-	cube->setTexture(texture);
-	cube->setShader(shader);
-	cube->setMesh(cubeMesh);
+	cube->setTexture(TextureManager::Instance()->GetTexture("dog"));
+	cube->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
+	cube->setMesh(MeshManager::Instance()->GetMesh("cube"));
 	cube->setColor(vec3(1,0,0));
 	root->addNode(cube);
 
 	cube2 = new SceneNode();
-//	cube2->setMatrix(matFactory::Identity4());
 	cube2->setMatrix(matFactory::Translate3(1.5, 0, 0));
-
-	createTexture("csample.png");
-	cube2->setTexture(texture);
-	cube2->setShader(shader);
-	cube2->setMesh(cubeMesh);
+	cube2->setTexture(TextureManager::Instance()->GetTexture("cat"));
+	cube2->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
+	cube2->setMesh(MeshManager::Instance()->GetMesh("cube"));
 	cube2->setColor(vec3(1, 0, 0));
 	root->addNode(cube2);
 
 
 	skybox = new SceneNode();
-	//	cube2->setMatrix(matFactory::Identity4());
 	skybox->setMatrix(matFactory::Scale3(3,3,3));
 	vector<const GLchar*> faces;
 	faces.push_back("right.jpg");
@@ -194,16 +178,18 @@ void createScene() {
 		cout << "texture present" << endl;
 	}
 	skybox->setSkybox(skyboxTexture);
-	skybox->setShaderSkybox(skyboxShader);
-	skybox->setMesh(cubeMesh);
+	skybox->setShaderSkybox(ShaderManager::Instance()->GetShader("skyboxShader"));
+	skybox->setMesh(MeshManager::Instance()->GetMesh("cube"));
 	skybox->setColor(vec3(1, 0, 0));
 	root->addNode(skybox);
 
 
+	checkOpenGLError("ERROR: Could not build scene.");
+
 }
 
 void destroyScene() {
-	
+	delete(scene);
 }
 
 void drawScene()
@@ -217,8 +203,9 @@ void drawScene()
 
 void cleanup()
 {
+	destroyMeshes();
 	destroyTextures();
-	destroyShaderProgram();
+	destroyShaders();
 	destroyScene();	
 }
 
@@ -394,13 +381,9 @@ void init(int argc, char* argv[])
 	setupGLEW();
 	setupOpenGL();
 
-	createShaderProgram(std::string("VerticeShader.glsl"),
-		std::string("FragmentShader.glsl"));
-	createSkyboxShaderProgram(std::string("VerticeShaderSkybox.glsl"),
-		std::string("FragmentShaderSkybox.glsl"));
-	//createTexture("sample.png");
-	//createTexture("csample.png");
-
+	createShaders();
+	createMeshes();
+	createTextures();
 	createScene();
 	setupCallbacks();
 }

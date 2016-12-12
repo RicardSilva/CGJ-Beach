@@ -2,32 +2,26 @@
 #include "Shader.h"
 #include <map>
 
-using namespace std;
 
 namespace engine {
 
 	class ShaderManager {
 
-	public:
+	private:
 		static ShaderManager *_instance;
 		map<string, Shader*> map;
+		ShaderManager() {};
+		ShaderManager(ShaderManager const&) {};
+		ShaderManager& operator=(ShaderManager const&) {};
 
-		ShaderManager() {}
 
-		void addShader(const string& name, Shader *shader) {
-			map.insert(make_pair(name, shader));
-		}
+	public:
 
-		Shader *getShader(const string& name) {
-			return map[name];
-		}
+		void AddShader(const string& name, Shader *shader);
+		Shader *GetShader(const string& name);
 
-		static ShaderManager* instance() {
-			if (_instance == nullptr)
-				_instance = new ShaderManager();
-			return _instance;
-		}
-
+		static ShaderManager *Instance();
+		void Destroy();
 
 	};
 }
