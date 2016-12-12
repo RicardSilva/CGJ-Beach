@@ -33,8 +33,9 @@ float key_yaw, key_pitch;
 qtrn quat = qtrn::qFromAngleAxis(0, vec4(0, 0, 1, 0));
 
 SceneGraph* scene;
-Shader* shader;
+Shader* shader, *skyboxShader;
 Texture* texture;
+SkyboxTexture* skyboxTexture;
 
 ShaderManager *ShaderManager::_instance = nullptr;
 SceneGraphManager *SceneGraphManager::_instance = nullptr;
@@ -87,6 +88,29 @@ void createShaderProgram(std::string& vs_file, std::string& fs_file)
 	checkOpenGLError("ERROR: Could not create shaders.");
 }
 
+void createSkyboxShaderProgram(std::string& vs_file, std::string& fs_file)
+{
+
+	skyboxShader = new Shader();
+	skyboxShader->LoadFromFile(GL_VERTEX_SHADER, vs_file);
+	skyboxShader->LoadFromFile(GL_FRAGMENT_SHADER, fs_file);
+
+	skyboxShader->CreateProgram();
+
+	skyboxShader->BindAttributeLocation(VERTICES, "inPosition");
+	//if (mesh->areTexcoordsLoaded())
+	skyboxShader->BindAttributeLocation(TEXCOORDS, "inTexcoord");
+	//if (mesh->areNormalsLoaded())
+	skyboxShader->BindAttributeLocation(NORMALS, "inNormal");
+
+	skyboxShader->LinkProgram();
+
+	//ModelMatrix_UId = shader->GetUniformLocation("ModelMatrix");
+	//UboId = shader->GetUniformBlockIndex("SharedMatrices");
+	ShaderManager::instance()->addShader("skyboxShader", skyboxShader);
+
+	checkOpenGLError("ERROR: Could not create shaders.");
+}
 void createTexture(std::string name) {
 	texture = new Texture();
 	//texture->setShader(shader);
@@ -120,7 +144,7 @@ void createScene() {
 
 	Mesh* cubeMesh = new Mesh(std::string("cube_vtn.obj"));
 
-	SceneNode *root, *cube, *cube2;
+	SceneNode *root, *cube, *cube2, *skybox;
 
 	root = new SceneNode();
 	root->setMatrix(matFactory::Identity4());
@@ -151,6 +175,31 @@ void createScene() {
 	cube2->setMesh(cubeMesh);
 	cube2->setColor(vec3(1, 0, 0));
 	root->addNode(cube2);
+
+
+	skybox = new SceneNode();
+	//	cube2->setMatrix(matFactory::Identity4());
+	skybox->setMatrix(matFactory::Scale3(3,3,3));
+	vector<const GLchar*> faces;
+	faces.push_back("right.jpg");
+	faces.push_back("left.jpg");
+	faces.push_back("top.jpg");
+	faces.push_back("bottom.jpg");
+	faces.push_back("back.jpg");
+	faces.push_back("front.jpg");
+
+	skyboxTexture = new SkyboxTexture();
+	skyboxTexture->Create(faces);
+	if (skyboxTexture != nullptr) {
+		cout << "texture present" << endl;
+	}
+	skybox->setSkybox(skyboxTexture);
+	skybox->setShaderSkybox(skyboxShader);
+	skybox->setMesh(cubeMesh);
+	skybox->setColor(vec3(1, 0, 0));
+	root->addNode(skybox);
+
+
 }
 
 void destroyScene() {
@@ -347,7 +396,8 @@ void init(int argc, char* argv[])
 
 	createShaderProgram(std::string("VerticeShader.glsl"),
 		std::string("FragmentShader.glsl"));
-
+	createSkyboxShaderProgram(std::string("VerticeShaderSkybox.glsl"),
+		std::string("FragmentShaderSkybox.glsl"));
 	//createTexture("sample.png");
 	//createTexture("csample.png");
 

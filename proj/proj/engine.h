@@ -14,3 +14,4 @@
 #include "SceneGraph.h"
 #include "SceneGraphManager.h"
 #include "Texture.h"
+#include "SkyboxTexture.h"
