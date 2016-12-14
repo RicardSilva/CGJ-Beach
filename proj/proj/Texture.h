@@ -9,9 +9,11 @@ namespace engine {
 
 	class Texture
 	{
+	protected:
 		GLuint texture;
 
 	public:
+		Texture() {}
 		Texture(std::string name) {
 			Create(name);
 		}
@@ -19,14 +21,16 @@ namespace engine {
 			glDeleteTextures(1, &texture);
 		}
 
-		void Use() {
+		virtual void Use() {
 			glBindTexture(GL_TEXTURE_2D, texture);
 		}
-		void UnUse() {
+		virtual void UnUse() {
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 
+	private:
 		void Create(std::string name);
+		
 	};
 
 }

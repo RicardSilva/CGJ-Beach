@@ -23,7 +23,7 @@ uniform SharedMatrices
 void main(void)
 {
 	exPosition = inPosition;
-	exTexcoord = inTexcoord;
+	exTexcoord = vec2(inTexcoord.x, 1.0-inTexcoord.y);
 	exNormal = inNormal;
 
 	vec4 MCPosition = vec4(inPosition, 1.0);

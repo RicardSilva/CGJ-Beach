@@ -13,11 +13,11 @@ uniform SharedMatrices
 	mat4 ProjectionMatrix;
 };
 
+smooth out vec3 eyeDirection;
 
 void main()
 {
-    vec4 pos = ProjectionMatrix* ViewMatrix* ModelMatrix *vec4(inPosition, 1.0);
+    vec4 pos = ProjectionMatrix * ViewMatrix* ModelMatrix *vec4(inPosition, 1.0);
     gl_Position = pos.xyww;
     TexCoords = inPosition;
-    //TexCoords = inTexcoord;
 }  

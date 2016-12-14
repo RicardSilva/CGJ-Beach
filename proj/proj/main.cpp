@@ -34,8 +34,8 @@ qtrn quat = qtrn::qFromAngleAxis(0, vec4(0, 0, 1, 0));
 
 SceneGraph* scene;
 Shader* shader, *skyboxShader;
-Texture* texture;
-SkyboxTexture* skyboxTexture;
+//Texture* texture;
+//Texture* skyboxTexture;
 GLuint UBO_BP=0;
 GLint UboID;
 
@@ -178,6 +178,17 @@ void createTextures() {
 	Texture *catTexture = new Texture("csample.png");
 	TextureManager::Instance()->AddTexture("cat", catTexture);
 
+	vector<const GLchar*> faces;
+	faces.push_back("right.jpg");
+	faces.push_back("left.jpg");
+	faces.push_back("top.jpg");
+	faces.push_back("bottom.jpg");
+	faces.push_back("back.jpg");
+	faces.push_back("front.jpg");
+
+	Texture *skyboxTexture = new SkyboxTexture(faces);
+	TextureManager::Instance()->AddTexture("skybox", skyboxTexture);
+
 	checkOpenGLError("ERROR: Could not create textures.");
 }
 void destroyTextures()
@@ -221,18 +232,8 @@ void createScene() {
 	root->addNode(cube);
 
 	skybox = new SceneNode();
-	skybox->setMatrix(matFactory::Scale3(3,3,3));
-	vector<const GLchar*> faces;
-	faces.push_back("right.jpg");
-	faces.push_back("left.jpg");
-	faces.push_back("top.jpg");
-	faces.push_back("bottom.jpg");
-	faces.push_back("back.jpg");
-	faces.push_back("front.jpg");
-
-	skyboxTexture = new SkyboxTexture();
-	skyboxTexture->Create(faces);
-	skybox->setSkybox(skyboxTexture);
+	skybox->setMatrix(matFactory::Scale3(3,3,3));	
+	skybox->setSkybox(TextureManager::Instance()->GetTexture("skybox"));
 	skybox->setShaderSkybox(ShaderManager::Instance()->GetShader("skyboxShader"));
 	skybox->setMesh(MeshManager::Instance()->GetMesh("cube"));
 	skybox->setColor(vec3(1, 0, 0));

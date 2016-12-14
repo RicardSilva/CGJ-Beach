@@ -16,7 +16,7 @@ namespace engine {
 		vec3 color;
 		Shader *shader;
 		Texture *texture;
-		SkyboxTexture *skyboxTexture;
+		Texture *skyboxTexture;
 		vector<SceneNode*> nodes;
 
 		GLint viewId, projID, modelID, colorID, textureID, skyboxID;
@@ -36,7 +36,7 @@ namespace engine {
 
 		void setColor(vec3& v) { color = v; }
 		void setTexture(Texture* t) { texture = t; }
-		void setSkybox(SkyboxTexture* st) { skyboxTexture = st; }
+		void setSkybox(Texture* st) { skyboxTexture = st; }
 
 		void setShader(Shader* s) { 
 			shader = s; 
@@ -98,8 +98,10 @@ namespace engine {
 					skyboxTexture->Use();
 				}
 				mesh->draw();
-				skyboxTexture->UnUse();
-				texture->UnUse();
+				if (skyboxTexture != nullptr)
+					skyboxTexture->UnUse();
+				if (texture != nullptr)
+					texture->UnUse();
 				
 				shader->UnUse();
 
