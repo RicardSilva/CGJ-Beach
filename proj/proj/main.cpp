@@ -41,6 +41,70 @@ GLint UboID;
 
 //ShaderManager *ShaderManager::_instance = nullptr;
 
+
+//////////////////////////////////////////////////////////////////// LIGHT
+
+struct Light {
+	vec3 position;
+	vec3 intensities;
+	float attenuation;
+	float ambientCoefficient; 
+};
+///// MATERIAL PARSING
+
+void extractMTLdata(string fp, string* materials, float diffuses[][3], float speculars[][3])
+{
+	// Counters
+	int m = 0;
+	int d = 0;
+	int s = 0;
+
+	// Open MTL file
+	ifstream inMTL;
+	inMTL.open(fp);
+	if (!inMTL.good())
+	{
+		cout << "ERROR OPENING MTL FILE" << endl;
+		exit(1);
+	}
+
+	// Read MTL file
+	while (!inMTL.eof())
+	{
+		string line;
+		getline(inMTL, line);
+		string type = line.substr(0, 2);
+
+		// Names
+		if (type.compare("ne") == 0)
+		{
+			// 1
+			// Extract token
+			string l = "newmtl ";
+			materials[m] = line.substr(l.size());
+			m++;
+		}
+
+		// 2
+		// Diffuses
+		else if (type.compare("Kd") == 0)
+		{
+			// Implementation challenge!
+		}
+
+		// 3
+		// Speculars
+		else if (type.compare("Ks") == 0)
+		{
+			// Implementation challenge!
+		}
+	}
+
+	// Close MTL file
+	inMTL.close();
+}
+
+
 /////////////////////////////////////////////////////////////////////// ERRORS
 
 bool isOpenGLError() {
@@ -93,6 +157,8 @@ void createShaders()
 	skyboxShader->BindAttributeLocation(TEXCOORDS, "inTexcoord");
 	skyboxShader->BindAttributeLocation(NORMALS, "inNormal");
 
+
+
 	skyboxShader->LinkProgram();
 	ShaderManager::Instance()->AddShader("skyboxShader", skyboxShader);
 
@@ -121,7 +187,7 @@ void destroyTextures()
 }
 
 void createMeshes() {
-	Mesh* cubeMesh = new Mesh(std::string("cube_vtn.obj"));
+	Mesh* cubeMesh = new Mesh(std::string("cube.obj"));
 	MeshManager::Instance()->AddMesh("cube", cubeMesh);
 	checkOpenGLError("ERROR: Could not create meshes.");
 }
@@ -146,22 +212,13 @@ void createScene() {
 	scene->setRoot(root);
 
 	cube = new SceneNode();
-	cube->setMatrix(matFactory::Translate3(-1.5, 0, 0));
+	cube->setMatrix(matFactory::Translate3(0, 0, 0));
 
 	cube->setTexture(TextureManager::Instance()->GetTexture("dog"));
 	cube->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	cube->setMesh(MeshManager::Instance()->GetMesh("cube"));
 	cube->setColor(vec3(1,0,0));
 	root->addNode(cube);
-
-	cube2 = new SceneNode();
-	cube2->setMatrix(matFactory::Translate3(1.5, 0, 0));
-	cube2->setTexture(TextureManager::Instance()->GetTexture("cat"));
-	cube2->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
-	cube2->setMesh(MeshManager::Instance()->GetMesh("cube"));
-	cube2->setColor(vec3(1, 0, 0));
-	root->addNode(cube2);
-
 
 	skybox = new SceneNode();
 	skybox->setMatrix(matFactory::Scale3(3,3,3));
