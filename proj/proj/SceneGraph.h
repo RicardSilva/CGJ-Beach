@@ -113,7 +113,7 @@ namespace engine {
 			glGetActiveUniformBlockiv(shader->GetProgram(), UboID,
 				GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize);
 			GLubyte * blockBuffer = (GLubyte *)malloc(blockSize);
-			const GLchar *names[] = { "ViewMatrix", "ProjectionMatrix", "position", "intensities", "attenuation", "ambientCoefficient" };
+			const GLchar *names[] = { "ViewMatrix", "ProjectionMatrix", "lightPosition", "intensities", "attenuation", "ambientCoefficient" };
 			GLuint indices[6];
 			glGetUniformIndices(shader->GetProgram(), 6, names, indices);
 			GLint offset[6];
@@ -122,7 +122,7 @@ namespace engine {
 			GLfloat ambient = 0.05f;
 			memcpy(blockBuffer + offset[0], camera->getViewMatrix().Transposed().Export(),	sizeof(mat4));
 			memcpy(blockBuffer + offset[1], camera->getProjMatrix().Transposed().Export(),	sizeof(mat4));
-			memcpy(blockBuffer + offset[2], new vec3(1,1, 1), sizeof(vec3));
+			memcpy(blockBuffer + offset[2], new vec3(-1, 1, -1), sizeof(vec3));
 			memcpy(blockBuffer + offset[3], new vec3(1, 1, 1), sizeof(vec3));
 			memcpy(blockBuffer + offset[4], &atten, sizeof(GLfloat));
 			memcpy(blockBuffer + offset[5], &ambient, sizeof(GLfloat));
