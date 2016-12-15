@@ -17,7 +17,11 @@ smooth out vec3 eyeDirection;
 
 void main()
 {
-    vec4 pos = ProjectionMatrix * ViewMatrix* ModelMatrix *vec4(inPosition, 1.0);
-    gl_Position = pos.xyww;
+		mat4 modifiedViewMatrix = ViewMatrix;
+		modifiedViewMatrix[0][2] = 0;
+		modifiedViewMatrix[1][2] = 0;
+		modifiedViewMatrix[2][2] = 0;
+    vec4 pos = ProjectionMatrix * modifiedViewMatrix * ModelMatrix *vec4(inPosition, 1.0);
+    gl_Position = pos;
     TexCoords = inPosition;
 }  

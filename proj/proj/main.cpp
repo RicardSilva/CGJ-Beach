@@ -232,7 +232,7 @@ void createScene() {
 	root->addNode(cube);
 
 	skybox = new SceneNode();
-	skybox->setMatrix(matFactory::Scale3(3,3,3));	
+	skybox->setMatrix(matFactory::Scale3(10,10,10));	
 	skybox->setSkybox(TextureManager::Instance()->GetTexture("skybox"));
 	skybox->setShaderSkybox(ShaderManager::Instance()->GetShader("skyboxShader"));
 	skybox->setMesh(MeshManager::Instance()->GetMesh("cube"));
