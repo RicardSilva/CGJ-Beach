@@ -19,7 +19,7 @@ namespace engine {
 		Texture *skyboxTexture;
 		vector<SceneNode*> nodes;
 
-		GLint viewId, projID, modelID, colorID, textureID, skyboxID;
+		GLint textureID, skyboxID;
 
 	public:
 
@@ -40,14 +40,10 @@ namespace engine {
 
 		void setShader(Shader* s) { 
 			shader = s; 
-			viewId = s->GetUniformLocation("ViewMatrix");
-			projID = s->GetUniformLocation("ProjectionMatrix");
-			modelID = s->GetUniformLocation("ModelMatrix");
-			colorID = s->GetUniformLocation("Color");
 			textureID = s->GetUniformLocation("Texture");
 
 			shader->Use();
-			glUniform3fv(colorID, 1, color.Export());
+			shader->LoadColor(color);
 			if (texture != nullptr) {
 				texture->Use();
 				glUniform1i(textureID, 0);
@@ -56,7 +52,7 @@ namespace engine {
 			shader->UnUse();
 				
 		}
-		void setShaderSkybox(Shader* s) {
+		/*void setShaderSkybox(Shader* s) {
 			shader = s;
 			viewId = s->GetUniformLocation("ViewMatrix");
 			projID = s->GetUniformLocation("ProjectionMatrix");
@@ -78,7 +74,7 @@ namespace engine {
 			}
 			shader->UnUse();
 		}
-
+*/
 		Shader *getShader() { return shader; }
 
 		void draw(mat4 &modelMatrix) {
@@ -86,11 +82,9 @@ namespace engine {
 			
 			if (mesh != nullptr) {
 				shader->Use();
-
-				glUniformMatrix4fv(modelID, 1, GL_FALSE, (modelMatrix * matrix).Transposed().Export());
+				shader->LoadModelMatrix(modelMatrix * matrix);
 				
 				if (texture != nullptr){
-					glCullFace(GL_BACK);
 					texture->Use();
 				}
 				if (skyboxTexture != nullptr) {
@@ -98,8 +92,10 @@ namespace engine {
 					skyboxTexture->Use();
 				}
 				mesh->draw();
-				if (skyboxTexture != nullptr)
+				if (skyboxTexture != nullptr) {
 					skyboxTexture->UnUse();
+					glCullFace(GL_BACK);
+				}
 				if (texture != nullptr)
 					texture->UnUse();
 				

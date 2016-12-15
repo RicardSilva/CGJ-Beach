@@ -18,7 +18,7 @@ int WinX = 640, WinY = 480;
 int WindowHandle = 0;
 unsigned int FrameCount = 0;
 
-float CameraDistance = 5;
+float CameraDistance = 20;
 
 
 int oldX, oldY;
@@ -33,9 +33,6 @@ float key_yaw, key_pitch;
 qtrn quat = qtrn::qFromAngleAxis(0, vec4(0, 0, 1, 0));
 
 SceneGraph* scene;
-Shader* shader, *skyboxShader;
-//Texture* texture;
-//Texture* skyboxTexture;
 GLuint UBO_BP=0;
 GLint UboID;
 
@@ -130,42 +127,14 @@ void checkOpenGLError(std::string error)
 
 void createShaders()
 {
-	//cubeShader
-	Shader *cubeShader = new Shader();
-	cubeShader->LoadFromFile(GL_VERTEX_SHADER, "VerticeShader.glsl");
-	cubeShader->LoadFromFile(GL_FRAGMENT_SHADER, "FragmentShader.glsl");
-
-	cubeShader->CreateProgram();
-
-	cubeShader->BindAttributeLocation(VERTICES, "inPosition");
-	cubeShader->BindAttributeLocation(TEXCOORDS, "inTexcoord");
-	cubeShader->BindAttributeLocation(NORMALS, "inNormal");
-
-	cubeShader->LinkProgram();
-
-	//ModelMatrix_UId = shader->GetUniformLocation("ModelMatrix");
+	//waterShader
+	Shader *waterShader = new WaterShader();
+	waterShader->Init("WaterVerticeShader.glsl", "WaterFragmentShader.glsl");
 	
-	ShaderManager::Instance()->AddShader("cubeShader", cubeShader);
-
-	skyboxShader = new Shader();
-	skyboxShader->LoadFromFile(GL_VERTEX_SHADER, "VerticeShaderSkybox.glsl");
-	skyboxShader->LoadFromFile(GL_FRAGMENT_SHADER, "FragmentShaderSkybox.glsl");
-
-	skyboxShader->CreateProgram();
-
-	skyboxShader->BindAttributeLocation(VERTICES, "inPosition");
-	skyboxShader->BindAttributeLocation(TEXCOORDS, "inTexcoord");
-	skyboxShader->BindAttributeLocation(NORMALS, "inNormal");
-
-
-
-	skyboxShader->LinkProgram();
-	ShaderManager::Instance()->AddShader("skyboxShader", skyboxShader);
+	ShaderManager::Instance()->AddShader("waterShader", waterShader);
 
 	checkOpenGLError("ERROR: Could not create shaders.");
 }
-
-
 void destroyShaders()
 {
 	ShaderManager::Instance()->Destroy();
@@ -211,34 +180,22 @@ void destroyMeshes() {
 void createScene() {
 	Camera *camera = new Camera();
 	camera->setViewMatrix(matFactory::Translate3(0,0,-CameraDistance) );
-	camera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX/WinY, 0.1f, 15));
-	scene = new SceneGraph(camera, ShaderManager::Instance()->GetShader("cubeShader"));
+	camera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX/WinY, 0.1f, 50));
+	scene = new SceneGraph(camera, ShaderManager::Instance()->GetShader("waterShader"));
 
-	SceneNode *root, *cube, *cube2, *skybox;
+	SceneNode *root, *water;
 
 	root = new SceneNode();
 	root->setMatrix(matFactory::Identity4());
-	root->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
-	root->setColor(vec3(0, 0, 0));
 	scene->setRoot(root);
 
-	cube = new SceneNode();
-	cube->setMatrix(matFactory::Translate3(0, 0, 0));
+	water = new SceneNode();
+	water->setMatrix(matFactory::Scale3(10, 0.1, 10));
 
-	cube->setTexture(TextureManager::Instance()->GetTexture("dog"));
-	cube->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
-	cube->setMesh(MeshManager::Instance()->GetMesh("cube"));
-	cube->setColor(vec3(1,0,0));
-	root->addNode(cube);
-
-	skybox = new SceneNode();
-	skybox->setMatrix(matFactory::Scale3(10,10,10));	
-	skybox->setSkybox(TextureManager::Instance()->GetTexture("skybox"));
-	skybox->setShaderSkybox(ShaderManager::Instance()->GetShader("skyboxShader"));
-	skybox->setMesh(MeshManager::Instance()->GetMesh("cube"));
-	skybox->setColor(vec3(1, 0, 0));
-	root->addNode(skybox);
-
+	water->setColor(vec3(0, 0, 1));
+	water->setShader(ShaderManager::Instance()->GetShader("waterShader"));
+	water->setMesh(MeshManager::Instance()->GetMesh("cube"));
+	root->addNode(water);
 
 	checkOpenGLError("ERROR: Could not build scene.");
 
@@ -353,24 +310,8 @@ void OnMouseMove(int x, int y) {
 	}
 }
 
-void SpecialInput(int key, int x, int y)
-{
-	switch (key)
-	{
-	case GLUT_KEY_UP:
-		scene->root->setMatrix(matFactory::Translate3(0, 0.1f, 0) * scene->root->getMatrix());
-		break;
-	case GLUT_KEY_DOWN:
-		scene->root->setMatrix(matFactory::Translate3(0, -0.1f, 0) * scene->root->getMatrix());
-		break;
-	case GLUT_KEY_LEFT:
-		scene->root->setMatrix(matFactory::Translate3(-0.1f, 0, 0) * scene->root->getMatrix());
-		break;
-	case GLUT_KEY_RIGHT:
-		scene->root->setMatrix(matFactory::Translate3(0.1f, 0, 0) * scene->root->getMatrix());
-		break;
-	}
-}
+void SpecialInput(int key, int x, int y){}
+	
 
 /////////////////////////////////////////////////////////////////////// SETUP
 

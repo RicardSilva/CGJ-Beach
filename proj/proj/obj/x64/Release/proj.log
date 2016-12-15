@@ -1,9 +1,15 @@
-﻿Build started 15/12/2016 00:40:07.
+﻿Build started 15/12/2016 13:22:45.
      1>Project "C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\proj.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /I"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\..\dependencies\freeglut\include" /I"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\..\dependencies\glew\include" /I"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\..\dependencies\soil\src" /Zi /nologo /W3 /WX- /sdl /O2 /Oi /GL /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\obj\x64\Release\\" /Fd"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\obj\x64\Release\vc140.pdb" /Gd /TP /errorReport:prompt main.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /I"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\..\dependencies\freeglut\include" /I"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\..\dependencies\glew\include" /I"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\..\dependencies\soil\src" /Zi /nologo /W3 /WX- /sdl /O2 /Oi /GL /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\obj\x64\Release\\" /Fd"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\obj\x64\Release\vc140.pdb" /Gd /TP /errorReport:prompt MeshManager.cpp Shader.cpp ShaderManager.cpp SkyboxTexture.cpp Texture.cpp TextureManager.cpp main.cpp
+         MeshManager.cpp
+         Shader.cpp
+         ShaderManager.cpp
+         SkyboxTexture.cpp
+         Texture.cpp
+         TextureManager.cpp
          main.cpp
-     1>main.cpp(217): warning C4101: 'cube2': unreferenced local variable
+     1>main.cpp(193): warning C4305: 'argument': truncation from 'double' to 'float'
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\bin\x64\Release\proj.exe" /NOLOGO /LIBPATH:"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\\..\dependencies\freeglut\lib\x64" /LIBPATH:"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\\..\dependencies\glew\lib\release\x64" /LIBPATH:"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\\..\dependencies\soil\lib" glew32.lib SOIL.lib freeglut.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\bin\x64\Release\proj.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG:incremental /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\bin\x64\Release\proj.lib" /MACHINE:X64 "C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\obj\x64\Release\proj.res"
          "C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\obj\x64\Release\Camera.obj"
@@ -21,13 +27,13 @@
          "C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\obj\x64\Release\TextureManager.obj"
          "C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\obj\x64\Release\vec.obj"
          Generating code
-         1 of 1419 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+         0 of 1407 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
            0 functions were new in current compilation
-           1 functions had inline decision re-evaluated but remain unchanged
+           0 functions had inline decision re-evaluated but remain unchanged
          Finished generating code
          proj.vcxproj -> C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\bin\x64\Release\proj.exe
      1>Done Building Project "C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\proj.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:02.02
+Time Elapsed 00:00:05.54

@@ -4,6 +4,7 @@
 #include "qtrn.h"
 
 #include "Shader.h"
+#include "WaterShader.h"
 #include "ShaderManager.h"
 #include "Camera.h"
 #include "OrthogonalCamera.h"
