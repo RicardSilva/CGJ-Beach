@@ -16,6 +16,9 @@ namespace engine {
 		float _near;
 		float _far;
 
+		float yaw;
+		float pitch;
+
 		qtrn _q;
 
 		mat4 viewMatrix;

@@ -32,6 +32,7 @@ namespace engine {
 			modelID = GetUniformLocation("ModelMatrix");
 			colorID = GetUniformLocation("Color");
 			textureID = GetUniformLocation("Texture");
+			clipPlaneID = GetUniformLocation("ClipingPlane");
 		}
 
 
@@ -44,9 +45,12 @@ namespace engine {
 		void LoadTexture(Texture *t) {
 			Shader::LoadTexture(textureID, t);
 		}
+		void LoadClipingPlane(vec4 &v) {
+			Shader::LoadVec4(clipPlaneID, v);
+		}
 
 	private:
-		GLint modelID, colorID, textureID;
+		GLint modelID, colorID, textureID, clipPlaneID;
 
 	};
 }

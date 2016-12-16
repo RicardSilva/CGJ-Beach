@@ -38,9 +38,11 @@ namespace engine {
 		virtual void LoadModelMatrix(mat4 &m) {};
 		virtual void LoadColor(vec3 &v) {};
 		virtual void LoadTexture(Texture *t) {};
+		virtual void LoadClipingPlane(vec4 &v) {};
 
 		void LoadFloat(GLint location, GLfloat f);
 		void LoadVec3(GLint location, vec3 &v);
+		void LoadVec4(GLint location, vec4 &v);
 		void LoadMat4(GLint location, mat4 &m);
 		void LoadTexture(GLint location, Texture *t);
 

@@ -29,6 +29,7 @@ bool mouseRightDown;
 float mouseX, mouseY;
 float prevX, prevY;
 float key_yaw, key_pitch;
+mat4 rotation;
 
 qtrn quat = qtrn::qFromAngleAxis(0, vec4(0, 0, 1, 0));
 
@@ -202,7 +203,7 @@ void createScene() {
 
 	cube2 = new SceneNode();
 	cube2->setMatrix(matFactory::Translate3(-2, 2, 0));
-	cube2->setColor(vec3(1, 0, 0));
+	cube2->setColor(vec3(0, 1, 0));
 	cube2->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	cube2->setMesh(MeshManager::Instance()->GetMesh("cube"));
 	cube2->setTexture(TextureManager::Instance()->GetTexture("cat"));
@@ -210,14 +211,14 @@ void createScene() {
 
 	cube3 = new SceneNode();
 	cube3->setMatrix(matFactory::Translate3(0, -2, 0));
-	cube3->setColor(vec3(1, 0, 0));
+	cube3->setColor(vec3(0, 0, 1));
 	cube3->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	cube3->setMesh(MeshManager::Instance()->GetMesh("cube"));
 	cube3->setTexture(TextureManager::Instance()->GetTexture("cat"));
 	root->addNode(cube3);
 
 	water = new SceneNode();
-	water->setMatrix(matFactory::Scale3(10, 0.1, 10));
+	water->setMatrix(matFactory::Scale3(10, 0, 10));
 	water->setColor(vec3(1, 1, 0));
 	water->setShader(ShaderManager::Instance()->GetShader("waterShader"));
 	water->setMesh(MeshManager::Instance()->GetMesh("cube"));
@@ -236,12 +237,22 @@ void destroyScene() {
 
 void drawScene()
 {
+	//render reflection
 	wfbos->bindReflectionFrameBuffer();
-	scene->draw();
-	wfbos->unbindCurrentFrameBuffer();
+	//scene->getCamera()->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
+	scene->draw(vec4(0,1,0,0));
 
-	scene->draw();
+	//render refractions
+	wfbos->bindRefractionFrameBuffer();
+	//scene->getCamera()->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
+	scene->draw(vec4(0,-1,0,0));
+
+	//render to screen
+	wfbos->unbindCurrentFrameBuffer();
+	//scene->getCamera()->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
+	scene->draw(vec4());
 	water->draw(matFactory::Identity4());
+
 	checkOpenGLError("ERROR: Could not draw scene.");
 }
 
@@ -259,11 +270,15 @@ void cleanup()
 void display()
 {
 	++FrameCount;
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 	wfbos->bindReflectionFrameBuffer();
+	glClearColor(0.0f, 0.8f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	drawScene();
+	wfbos->bindRefractionFrameBuffer();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	wfbos->unbindCurrentFrameBuffer();
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	drawScene();
 	glutSwapBuffers();
@@ -304,6 +319,51 @@ void myKeydown(unsigned char key, int x, int y) {
 	}
 }
 
+//void mouseWheel(int button, int dir, int x, int y)
+//{
+//	if (dir > 0) {
+//		CameraDistance -= 1;
+//	}
+//	else {
+//		CameraDistance += 1;
+//	}
+//
+//	mat4 rotate = qGLMatrix(quat);
+//
+//	scene->getCamera()->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance) * rotate);
+//}
+//
+//void OnMouseDown(int button, int state, int x, int y) {
+//	rotated = false;
+//	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+//		oldX = x;
+//		oldY = y;
+//		rotated = true;
+//	}
+//}
+//
+//void OnMouseMove(int x, int y) {
+//	if (rotated) {
+//
+//		key_yaw = 0.5f * (x - oldX);
+//		key_pitch = 0.5f * (y - oldY);
+//
+//		oldX = x;
+//		oldY = y;
+//
+//		qtrn rotateX = qtrn::qFromAngleAxis(-key_pitch, vec4(1, 0, 0, 1));
+//		qtrn rotateY = qtrn::qFromAngleAxis(-key_yaw, vec4(0, 1, 0, 1));
+//		qtrn newQquat = rotateY * rotateX;
+//
+//		key_pitch = key_yaw = 0;
+//
+//		quat = quat * newQquat;
+//		mat4 rotate = qGLMatrix(quat);
+//
+//		scene->getCamera()->setViewMatrix (matFactory::Translate3(0, 0, -CameraDistance) * rotate);
+//	}
+//}
+
 void mouseWheel(int button, int dir, int x, int y)
 {
 	if (dir > 0) {
@@ -313,9 +373,7 @@ void mouseWheel(int button, int dir, int x, int y)
 		CameraDistance += 1;
 	}
 
-	mat4 rotate = qGLMatrix(quat);
-
-	scene->getCamera()->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance) * rotate);
+	scene->getCamera()->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance) * rotation);
 }
 
 void OnMouseDown(int button, int state, int x, int y) {
@@ -330,22 +388,21 @@ void OnMouseDown(int button, int state, int x, int y) {
 void OnMouseMove(int x, int y) {
 	if (rotated) {
 
-		key_yaw = 0.5f * (x - oldX);
-		key_pitch = 0.5f * (y - oldY);
+		key_yaw += 0.5f * (x - oldX);
+		if (key_yaw > 360)
+			key_yaw -= 360;
+		key_pitch += 0.5f * (y - oldY);
+		if (key_pitch > 360)
+			key_pitch -= 360;
 
 		oldX = x;
 		oldY = y;
 
-		qtrn rotateX = qtrn::qFromAngleAxis(-key_pitch, vec4(1, 0, 0, 1));
-		qtrn rotateY = qtrn::qFromAngleAxis(-key_yaw, vec4(0, 1, 0, 1));
-		qtrn newQquat = rotateY * rotateX;
-
-		key_pitch = key_yaw = 0;
-
-		quat = quat * newQquat;
-		mat4 rotate = qGLMatrix(quat);
-
-		scene->getCamera()->setViewMatrix (matFactory::Translate3(0, 0, -CameraDistance) * rotate);
+		mat4 rotateX = matFactory::Rotate3(vec3(0,1,0), key_yaw);
+		mat4 rotateY = matFactory::Rotate3(vec3(1,0,0), key_pitch);
+		rotation = rotateY * rotateX;
+		
+		scene->getCamera()->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance) * rotation);
 	}
 }
 
@@ -380,6 +437,7 @@ void setupOpenGL() {
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
+	glEnable(GL_CLIP_DISTANCE0);
 }
 
 void setupGLEW() {

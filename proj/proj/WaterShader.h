@@ -44,6 +44,7 @@ namespace engine {
 		void LoadTexture(Texture *t) {
 			Shader::LoadTexture(textureID, t);
 		}
+		
 	private:
 		GLint modelID, colorID, textureID;
 

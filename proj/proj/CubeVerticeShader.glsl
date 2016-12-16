@@ -11,15 +11,14 @@ uniform SharedMatrices
 {
 	mat4 ViewMatrix;
 	mat4 ProjectionMatrix;
-	
-	vec3 lightPosition;
-  vec3 intensities; //a.k.a the color of the light
-  float attenuation; 
-  float ambientCoefficient; 
+  vec4 ClipingPlane;
 };
 
 void main(void){
 
-	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(inPosition,1.0);
+	vec4 WorldPosition = ModelMatrix * vec4(inPosition,1.0);
+	gl_ClipDistance[0] = dot(WorldPosition, ClipingPlane);
+	
+	gl_Position = ProjectionMatrix * ViewMatrix * WorldPosition;
 	exTexcoord = vec2(inTexcoord.x, 1.0-inTexcoord.y);
 }

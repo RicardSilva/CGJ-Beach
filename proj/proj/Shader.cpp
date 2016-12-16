@@ -103,6 +103,9 @@ namespace engine {
 	void Shader::LoadVec3(GLint location, vec3 &v) {
 		glUniform3fv(location, 1, v.Export());
 	}
+	void Shader::LoadVec4(GLint location, vec4 &v) {
+		glUniform4fv(location, 1, v.Export());
+	}
 	void Shader::LoadMat4(GLint location, mat4 &m) {
 		glUniformMatrix4fv(location, 1, GL_FALSE, m.Transposed().Export());
 	}
