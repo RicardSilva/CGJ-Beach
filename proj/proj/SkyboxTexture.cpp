@@ -1,5 +1,4 @@
 #include "SkyboxTexture.h"
-#include <iostream>
 
 namespace engine {
 
@@ -24,7 +23,7 @@ namespace engine {
 		}
 	}
 
-	void SkyboxTexture::Create(vector<const GLchar*> faces)
+	void SkyboxTexture::Create(std::vector<const GLchar*> faces)
 	{
 		glGenTextures(1, &texture);
 		glActiveTexture(GL_TEXTURE0);
@@ -51,10 +50,5 @@ namespace engine {
 		checkOpenGLError2("ERROR: Could not create skybox texture.");
 	}
 
-
-	/*void SkyboxTexture::Destroy()
-	{
-		glDeleteTextures(1, &texture);
-	}*/
 
 }

@@ -1,9 +1,10 @@
 #pragma once
 
+#include <iostream>
+#include <string>
+#include <SOIL.h>
 #include "GL/glew.h"
 #include "GL/freeglut.h"
-#include <SOIL.h>
-#include "Shader.h"
 
 namespace engine {
 
@@ -14,12 +15,18 @@ namespace engine {
 
 	public:
 		Texture() {}
-		Texture(std::string name) {
+		Texture(const std::string &name) {
 			Create(name);
+		}
+		Texture(GLuint t){
+			texture = t;
+			glActiveTexture(GL_TEXTURE0);
 		}
 		virtual ~Texture() {
 			glDeleteTextures(1, &texture);
 		}
+
+		GLuint TextureID() { return texture; }
 
 		virtual void Use() {
 			glBindTexture(GL_TEXTURE_2D, texture);

@@ -1,5 +1,4 @@
 #include "Texture.h"
-#include <iostream>
 
 namespace engine {
 

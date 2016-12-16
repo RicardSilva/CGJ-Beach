@@ -9,7 +9,7 @@ namespace engine {
 
 	private:
 		static TextureManager *_instance;
-		map<string, Texture*> map;
+		std::map<std::string, Texture*> map;
 		TextureManager() {};
 		TextureManager(TextureManager const&) {};
 		TextureManager& operator=(TextureManager const&) {};
@@ -17,8 +17,8 @@ namespace engine {
 
 	public:
 
-		void AddTexture(const string& name, Texture *texture);
-		Texture *GetTexture(const string& name);
+		void AddTexture(const std::string& name, Texture *texture);
+		Texture *GetTexture(const std::string& name);
 
 		static TextureManager *Instance();
 		void Destroy();

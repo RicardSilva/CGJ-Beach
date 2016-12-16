@@ -5,6 +5,7 @@
 
 #include "Shader.h"
 #include "WaterShader.h"
+#include "CubeShader.h"
 #include "ShaderManager.h"
 #include "Camera.h"
 #include "OrthogonalCamera.h"
@@ -16,3 +17,6 @@
 #include "Texture.h"
 #include "SkyboxTexture.h"
 #include "TextureManager.h"
+#include "WaterFrameBuffers.h"
+
+int WinX = 640, WinY = 480;

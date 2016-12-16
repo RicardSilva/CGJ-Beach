@@ -2,7 +2,6 @@
 #include "engine.h"
 #include <vector>
 #include "Texture.h"
-#include "SkyboxTexture.h"
 
 
 using namespace std;
@@ -19,7 +18,7 @@ namespace engine {
 		Texture *skyboxTexture;
 		vector<SceneNode*> nodes;
 
-		GLint textureID, skyboxID;
+		GLint  skyboxID;
 
 	public:
 
@@ -38,20 +37,7 @@ namespace engine {
 		void setTexture(Texture* t) { texture = t; }
 		void setSkybox(Texture* st) { skyboxTexture = st; }
 
-		void setShader(Shader* s) { 
-			shader = s; 
-			textureID = s->GetUniformLocation("Texture");
-
-			shader->Use();
-			shader->LoadColor(color);
-			if (texture != nullptr) {
-				texture->Use();
-				glUniform1i(textureID, 0);
-				texture->UnUse();
-			}
-			shader->UnUse();
-				
-		}
+		void setShader(Shader* s) { shader = s; }
 		/*void setShaderSkybox(Shader* s) {
 			shader = s;
 			viewId = s->GetUniformLocation("ViewMatrix");
@@ -83,8 +69,10 @@ namespace engine {
 			if (mesh != nullptr) {
 				shader->Use();
 				shader->LoadModelMatrix(modelMatrix * matrix);
-				
+				shader->LoadColor(color);
 				if (texture != nullptr){
+
+					shader->LoadTexture(texture);
 					texture->Use();
 				}
 				if (skyboxTexture != nullptr) {

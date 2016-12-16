@@ -1,25 +1,20 @@
 #pragma once
 
-#include "GL/glew.h"
-#include "GL/freeglut.h"
-#include <SOIL.h>
 #include "Texture.h"
 #include <vector>
+#include <string>
 
 namespace engine {
 
 	class SkyboxTexture : public Texture
 	{
-		//GLuint texture;
 
 	public:
-		SkyboxTexture(vector<const GLchar*> faces) {
+		SkyboxTexture(std::vector<const GLchar*> faces) {
 			Create(faces);
 		}
+		SkyboxTexture(GLuint t) : Texture(t) {}
 
-		
-
-		//void Destroy();
 
 		void Use() {
 			glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
@@ -28,7 +23,7 @@ namespace engine {
 			glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 		}
 	private:
-		void Create(vector<const GLchar*> faces);
+		void Create(std::vector<const GLchar*> faces);
 	};
 
 }

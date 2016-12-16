@@ -1,16 +1,15 @@
 #pragma once
 #include "TextureManager.h"
 #include <stddef.h>  // defines NULL
-using namespace std;
 namespace engine {
 
 	TextureManager* TextureManager::_instance = NULL;
 
-	void TextureManager::AddTexture(const string& name, Texture *texture) {
-		map.insert(make_pair(name, texture));
+	void TextureManager::AddTexture(const std::string& name, Texture *texture) {
+		map.insert(std::make_pair(name, texture));
 	}
 
-	Texture *TextureManager::GetTexture(const string& name) {
+	Texture *TextureManager::GetTexture(const std::string& name) {
 		return map[name];
 	}
 

@@ -1,10 +1,11 @@
 #pragma once
-#include <GL/glew.h>
+
 #include <map>
 #include "vec.h"
 #include "mat.h"
 #include "Texture.h"
 #include <string>
+#include <GL/glew.h>
 
 using namespace std;
 
@@ -36,12 +37,12 @@ namespace engine {
 
 		virtual void LoadModelMatrix(mat4 &m) {};
 		virtual void LoadColor(vec3 &v) {};
-		//virtual void LoadTexture(Texture *t) {};
+		virtual void LoadTexture(Texture *t) {};
 
 		void LoadFloat(GLint location, GLfloat f);
 		void LoadVec3(GLint location, vec3 &v);
 		void LoadMat4(GLint location, mat4 &m);
-		//void LoadTexture(GLint location, Texture *t);
+		void LoadTexture(GLint location, Texture *t);
 
 		void BindAttribute(GLint attribute, const GLchar* variableName);
 		GLint GetUniformLocation(const GLchar* source);

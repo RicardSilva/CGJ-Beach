@@ -106,9 +106,9 @@ namespace engine {
 	void Shader::LoadMat4(GLint location, mat4 &m) {
 		glUniformMatrix4fv(location, 1, GL_FALSE, m.Transposed().Export());
 	}
-	//void Shader::LoadTexture(GLint location, Texture *t) {
-	//	glUniform1i(location, 0);
-	//}
+	void Shader::LoadTexture(GLint location, Texture *t) {
+		glUniform1i(location, 0);
+	}
 
 
 	void Shader::BindAttribute(GLint attribute, const GLchar* variableName) {

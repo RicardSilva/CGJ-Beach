@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CubeShader.h" />
+    <ClInclude Include="WaterFrameBuffers.h" />
     <ClInclude Include="WaterShader.h" />
     <ClInclude Include="engine.h" />
     <ClInclude Include="mat.h" />

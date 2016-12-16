@@ -14,7 +14,7 @@
 #define CAPTION "Loading World"
 using namespace engine;
 
-int WinX = 640, WinY = 480;
+//int WinX = 640, WinY = 480;
 int WindowHandle = 0;
 unsigned int FrameCount = 0;
 
@@ -33,10 +33,8 @@ float key_yaw, key_pitch;
 qtrn quat = qtrn::qFromAngleAxis(0, vec4(0, 0, 1, 0));
 
 SceneGraph* scene;
-GLuint UBO_BP=0;
-GLint UboID;
-
-//ShaderManager *ShaderManager::_instance = nullptr;
+SceneNode* water;
+WaterFrameBuffers* wfbos;
 
 
 //////////////////////////////////////////////////////////////////// LIGHT
@@ -130,8 +128,12 @@ void createShaders()
 	//waterShader
 	Shader *waterShader = new WaterShader();
 	waterShader->Init("WaterVerticeShader.glsl", "WaterFragmentShader.glsl");
-	
 	ShaderManager::Instance()->AddShader("waterShader", waterShader);
+
+	//simpleCubeShader
+	Shader *cubeShader = new CubeShader();
+	cubeShader->Init("CubeVerticeShader.glsl", "CubeFragmentShader.glsl");
+	ShaderManager::Instance()->AddShader("cubeShader", cubeShader);
 
 	checkOpenGLError("ERROR: Could not create shaders.");
 }
@@ -178,24 +180,51 @@ void destroyMeshes() {
 
 /////////////////////////////////////////////////////////////////////// SCENE
 void createScene() {
+	wfbos = new WaterFrameBuffers();
 	Camera *camera = new Camera();
 	camera->setViewMatrix(matFactory::Translate3(0,0,-CameraDistance) );
 	camera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX/WinY, 0.1f, 50));
 	scene = new SceneGraph(camera, ShaderManager::Instance()->GetShader("waterShader"));
 
-	SceneNode *root, *water;
+	SceneNode *root, *cube, *cube2, *cube3;
 
 	root = new SceneNode();
 	root->setMatrix(matFactory::Identity4());
 	scene->setRoot(root);
 
+	cube = new SceneNode();
+	cube->setMatrix(matFactory::Translate3(2,2,0));
+	cube->setColor(vec3(1, 0, 0));
+	cube->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
+	cube->setMesh(MeshManager::Instance()->GetMesh("cube"));
+	cube->setTexture(TextureManager::Instance()->GetTexture("dog"));
+	root->addNode(cube);
+
+	cube2 = new SceneNode();
+	cube2->setMatrix(matFactory::Translate3(-2, 2, 0));
+	cube2->setColor(vec3(1, 0, 0));
+	cube2->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
+	cube2->setMesh(MeshManager::Instance()->GetMesh("cube"));
+	cube2->setTexture(TextureManager::Instance()->GetTexture("cat"));
+	root->addNode(cube2);
+
+	cube3 = new SceneNode();
+	cube3->setMatrix(matFactory::Translate3(0, -2, 0));
+	cube3->setColor(vec3(1, 0, 0));
+	cube3->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
+	cube3->setMesh(MeshManager::Instance()->GetMesh("cube"));
+	cube3->setTexture(TextureManager::Instance()->GetTexture("cat"));
+	root->addNode(cube3);
+
 	water = new SceneNode();
 	water->setMatrix(matFactory::Scale3(10, 0.1, 10));
-
-	water->setColor(vec3(0, 0, 1));
+	water->setColor(vec3(1, 1, 0));
 	water->setShader(ShaderManager::Instance()->GetShader("waterShader"));
 	water->setMesh(MeshManager::Instance()->GetMesh("cube"));
-	root->addNode(water);
+
+	
+	water->setTexture(new Texture(wfbos->getReflectionTexture()));
+	
 
 	checkOpenGLError("ERROR: Could not build scene.");
 
@@ -207,7 +236,12 @@ void destroyScene() {
 
 void drawScene()
 {
+	wfbos->bindReflectionFrameBuffer();
 	scene->draw();
+	wfbos->unbindCurrentFrameBuffer();
+
+	scene->draw();
+	water->draw(matFactory::Identity4());
 	checkOpenGLError("ERROR: Could not draw scene.");
 }
 
@@ -226,6 +260,11 @@ void display()
 {
 	++FrameCount;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	wfbos->bindReflectionFrameBuffer();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	drawScene();
+	wfbos->unbindCurrentFrameBuffer();
+
 	drawScene();
 	glutSwapBuffers();
 }

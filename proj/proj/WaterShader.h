@@ -31,6 +31,7 @@ namespace engine {
 		void GetUniformLocations(void) {
 			modelID = GetUniformLocation("ModelMatrix");
 			colorID = GetUniformLocation("Color");
+			textureID = GetUniformLocation("Texture");
 		}
 
 
@@ -40,9 +41,11 @@ namespace engine {
 		void LoadColor(vec3 &v) {
 			Shader::LoadVec3(colorID, v);
 		}
-
+		void LoadTexture(Texture *t) {
+			Shader::LoadTexture(textureID, t);
+		}
 	private:
-		GLint modelID, colorID;
+		GLint modelID, colorID, textureID;
 
 	};
 }
