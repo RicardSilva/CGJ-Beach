@@ -6,6 +6,7 @@ namespace engine {
 	Camera::Camera() {}
 
 	Camera::Camera(float near, float far) : _near(near), _far(far) { _eye = new vec3(); _center = new vec3(); _up = new vec3();  }
+	Camera::Camera(vec4 &v) : clippingPlane(v){}
 
 	Camera::~Camera() {
 		delete _eye;

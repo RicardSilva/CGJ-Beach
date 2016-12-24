@@ -17,5 +17,5 @@ uniform SharedMatrices
 void main(void){
 
 	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(inPosition,1.0);
-	exTexcoord = vec2(inTexcoord.x, inTexcoord.y);
+	exTexcoord = vec2(inTexcoord.x, -inTexcoord.y);
 }

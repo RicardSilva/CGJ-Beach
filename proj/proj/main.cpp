@@ -29,13 +29,14 @@ bool mouseRightDown;
 float mouseX, mouseY;
 float prevX, prevY;
 float key_yaw, key_pitch;
-mat4 rotation;
+mat4 rotation, inverseRotation;
 
 qtrn quat = qtrn::qFromAngleAxis(0, vec4(0, 0, 1, 0));
 
 SceneGraph* scene;
 SceneNode* water;
 WaterFrameBuffers* wfbos;
+Camera *mainCamera, *upCamera, *downCamera;
 
 
 //////////////////////////////////////////////////////////////////// LIGHT
@@ -177,15 +178,29 @@ void createMeshes() {
 void destroyMeshes() {
 	MeshManager::Instance()->Destroy();
 }
+void createCameras() {
+	mainCamera = new Camera(vec4());
+	mainCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
+	mainCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 50));
 
+	upCamera = new Camera(vec4(0, -1, 0, 0));
+	upCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
+	upCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 50));
+
+	downCamera = new Camera(vec4(0, 1, 0, 0));
+	downCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
+	downCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 50));
+}
+void destroyCameras() {
+	delete(mainCamera);
+	delete(upCamera);
+	delete(downCamera);
+}
 
 /////////////////////////////////////////////////////////////////////// SCENE
 void createScene() {
 	wfbos = new WaterFrameBuffers();
-	Camera *camera = new Camera();
-	camera->setViewMatrix(matFactory::Translate3(0,0,-CameraDistance) );
-	camera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX/WinY, 0.1f, 50));
-	scene = new SceneGraph(camera, ShaderManager::Instance()->GetShader("waterShader"));
+	scene = new SceneGraph(mainCamera, ShaderManager::Instance()->GetShader("waterShader"));
 
 	SceneNode *root, *cube, *cube2, *cube3;
 
@@ -194,7 +209,7 @@ void createScene() {
 	scene->setRoot(root);
 
 	cube = new SceneNode();
-	cube->setMatrix(matFactory::Translate3(2,2,0));
+	cube->setMatrix(matFactory::Translate3(2,2,-5));
 	cube->setColor(vec3(1, 0, 0));
 	cube->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	cube->setMesh(MeshManager::Instance()->GetMesh("cube"));
@@ -202,7 +217,7 @@ void createScene() {
 	root->addNode(cube);
 
 	cube2 = new SceneNode();
-	cube2->setMatrix(matFactory::Translate3(-2, 2, 0));
+	cube2->setMatrix(matFactory::Translate3(-2, 2, -5));
 	cube2->setColor(vec3(0, 1, 0));
 	cube2->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	cube2->setMesh(MeshManager::Instance()->GetMesh("cube"));
@@ -239,18 +254,20 @@ void drawScene()
 {
 	//render reflection
 	wfbos->bindReflectionFrameBuffer();
-	//scene->getCamera()->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
-	scene->draw(vec4(0,1,0,0));
+	scene->setCamera(downCamera);
+	scene->draw();
 
 	//render refractions
 	wfbos->bindRefractionFrameBuffer();
-	//scene->getCamera()->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
-	scene->draw(vec4(0,-1,0,0));
+	scene->setCamera(upCamera);
+	scene->draw();
 
 	//render to screen
 	wfbos->unbindCurrentFrameBuffer();
-	//scene->getCamera()->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
-	scene->draw(vec4());
+	scene->setCamera(mainCamera);
+	scene->draw();
+
+	//render water
 	water->draw(matFactory::Identity4());
 
 	checkOpenGLError("ERROR: Could not draw scene.");
@@ -264,6 +281,7 @@ void cleanup()
 	destroyMeshes();
 	destroyTextures();
 	destroyShaders();
+	destroyCameras();
 	destroyScene();	
 }
 
@@ -373,7 +391,10 @@ void mouseWheel(int button, int dir, int x, int y)
 		CameraDistance += 1;
 	}
 
-	scene->getCamera()->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance) * rotation);
+	//scene->getCamera()->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance) * rotation);
+	mainCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance) * rotation);
+	upCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance) * rotation);
+	downCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance) * inverseRotation);
 }
 
 void OnMouseDown(int button, int state, int x, int y) {
@@ -401,8 +422,14 @@ void OnMouseMove(int x, int y) {
 		mat4 rotateX = matFactory::Rotate3(vec3(0,1,0), key_yaw);
 		mat4 rotateY = matFactory::Rotate3(vec3(1,0,0), key_pitch);
 		rotation = rotateY * rotateX;
+
+		mat4 rotateInverseY = matFactory::Rotate3(vec3(1, 0, 0), -key_pitch);
+		inverseRotation = rotateInverseY * rotateX;
 		
-		scene->getCamera()->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance) * rotation);
+		//scene->getCamera()->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance) * rotation);
+		mainCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance) * rotation);
+		upCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance) * rotation);
+		downCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance) * inverseRotation);
 	}
 }
 
@@ -478,6 +505,7 @@ void init(int argc, char* argv[])
 	createShaders();
 	createMeshes();
 	createTextures();
+	createCameras();
 	createScene();
 	setupCallbacks();
 }

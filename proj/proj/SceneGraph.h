@@ -11,6 +11,7 @@ namespace engine {
 		Camera* camera;
 		Shader* shader;
 		SceneNode* root;
+		
 	
 		SceneGraph(Camera *camera, Shader *shader)
 		{
@@ -18,7 +19,7 @@ namespace engine {
 			this->setShader(shader);
 		}
 		virtual ~SceneGraph() {
-			delete(camera);
+			
 			delete(root);
 		}
 		void setCamera(Camera *c) { camera = c; }
@@ -29,7 +30,9 @@ namespace engine {
 
 		void setRoot(SceneNode *r) { root = r; }
 		SceneNode *getRoot() { return root; }
+
 		
+
 		bool isOpenGLError() {
 			bool isError = false;
 			GLenum errCode;
@@ -51,7 +54,7 @@ namespace engine {
 			}
 		}
 
-		void draw(vec4 &clipingPlane) {
+		void draw() {
 
 			
 			shader->Use();
@@ -67,7 +70,7 @@ namespace engine {
 			glGetActiveUniformsiv(shader->GetProgram(), 3, indices, GL_UNIFORM_OFFSET, offset);
 			memcpy(blockBuffer + offset[0], camera->getViewMatrix().Transposed().Export(),	sizeof(mat4));
 			memcpy(blockBuffer + offset[1], camera->getProjMatrix().Transposed().Export(),	sizeof(mat4));
-			memcpy(blockBuffer + offset[2], clipingPlane.Export(), sizeof(vec4));
+			memcpy(blockBuffer + offset[2], camera->getClippingPlane().Export(), sizeof(vec4));
 			
 			GLuint uboHandle;
 			glGenBuffers(1, &uboHandle);

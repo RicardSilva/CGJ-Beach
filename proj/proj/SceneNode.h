@@ -13,7 +13,6 @@ namespace engine {
 		Mesh *mesh;
 		mat4 matrix;
 		vec3 color;
-		vec4 clipPlane;
 		Shader *shader;
 		Texture *texture;
 		Texture *skyboxTexture;
@@ -35,7 +34,6 @@ namespace engine {
 		Mesh *getMesh() { return mesh; }
 
 		void setColor(vec3& v) { color = v; }
-		void setClipPlane(vec4& v) { clipPlane = v; }
 		void setTexture(Texture* t) { texture = t; }
 		void setSkybox(Texture* st) { skyboxTexture = st; }
 
@@ -72,7 +70,7 @@ namespace engine {
 				shader->Use();
 				shader->LoadModelMatrix(modelMatrix * matrix);
 				shader->LoadColor(color);
-				shader->LoadClipingPlane(clipPlane);
+				//shader->LoadClipingPlane(clipPlane);
 				if (texture != nullptr){
 
 					shader->LoadTexture(texture);

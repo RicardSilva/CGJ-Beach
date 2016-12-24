@@ -16,8 +16,7 @@ namespace engine {
 		float _near;
 		float _far;
 
-		float yaw;
-		float pitch;
+		vec4 clippingPlane;
 
 		qtrn _q;
 
@@ -28,12 +27,16 @@ namespace engine {
 	public:
 		Camera();
 		Camera(float near, float far);
+		Camera(vec4 &v);
 
 		virtual ~Camera();
 
 		vec3 *getEye();
 		vec3 *getCenter();
 		vec3 *getUp();
+		void setClippingPlane(vec4& v) { clippingPlane = v; }
+		vec4 getClippingPlane() { return clippingPlane; }
+
 
 		void setEye(float x, float y, float z);
 		void setEye(const vec3 &v);
