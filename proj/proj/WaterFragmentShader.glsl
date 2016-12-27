@@ -12,6 +12,7 @@ uniform float movementFactor;
 
 in vec4 clipSpaceCoords;
 in vec2 exTexcoord;
+in vec3 toCameraVector;
 
 layout(location = 0) out vec3 FragmentColor;
 
@@ -37,11 +38,13 @@ void main(void){
 	vec4 reflectColor = texture(ReflectionTexture, reflectTexCoords);
   vec4 refractColor = texture(RefractionTexture, refractTexCoords);
 
-	FragmentColor = mix(reflectColor, refractColor, 0.5).xyz;
+	vec3 viewVector = normalize(toCameraVector);
+	float refractiveFactor = dot(viewVector, vec3(0.0, 1.0, 0.0));
+	
+	
+	FragmentColor = mix(reflectColor, refractColor, refractiveFactor).xyz;
 	FragmentColor = mix(FragmentColor, vec3(0.0, 0.3, 0.5), 0.2);
 	
 	
-	
-	//FragmentColor = texture(Texture, exTexcoord).xyz;
 }
 
