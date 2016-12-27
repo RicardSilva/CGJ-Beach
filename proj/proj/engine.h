@@ -13,6 +13,7 @@
 #include "Mesh.h"
 #include "MeshManager.h"
 #include "SceneNode.h"
+#include "WaterSceneNode.h"
 #include "SceneGraph.h"
 #include "Texture.h"
 #include "SkyboxTexture.h"

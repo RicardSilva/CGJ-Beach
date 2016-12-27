@@ -3,7 +3,8 @@
 in vec3 inPosition;
 in vec2 inTexcoord;
 
-out vec2 exTexcoord;
+//out vec2 exTexcoord;
+out vec4 clipSpaceCoords;
 
 uniform mat4 ModelMatrix;
 
@@ -16,6 +17,9 @@ uniform SharedMatrices
 
 void main(void){
 
-	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(inPosition,1.0);
-	exTexcoord = vec2(inTexcoord.x, -inTexcoord.y);
+	clipSpaceCoords = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(inPosition,1.0);
+	
+	
+	gl_Position = clipSpaceCoords;
+	//exTexcoord = vec2(inTexcoord.x, -inTexcoord.y);
 }

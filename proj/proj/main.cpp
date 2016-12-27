@@ -232,14 +232,14 @@ void createScene() {
 	cube3->setTexture(TextureManager::Instance()->GetTexture("cat"));
 	root->addNode(cube3);
 
-	water = new SceneNode();
+	water = new WaterSceneNode();
 	water->setMatrix(matFactory::Scale3(10, 0, 10));
 	water->setColor(vec3(1, 1, 0));
 	water->setShader(ShaderManager::Instance()->GetShader("waterShader"));
 	water->setMesh(MeshManager::Instance()->GetMesh("cube"));
 
-	
-	water->setTexture(new Texture(wfbos->getReflectionTexture()));
+	water->setReflectionTexture(wfbos->getReflectionTexture());
+	water->setRefractionTexture(wfbos->getRefractionTexture());
 	
 
 	checkOpenGLError("ERROR: Could not build scene.");

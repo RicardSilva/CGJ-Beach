@@ -9,6 +9,6 @@ uniform sampler2D Texture;
 
 void main(void){
 
-	FragmentColor = Color;
-  //FragmentColor = texture(Texture, exTexcoord).xyz;
+	//FragmentColor = Color;
+  FragmentColor = texture(Texture, exTexcoord).xyz;
 }

@@ -9,7 +9,7 @@ using namespace std;
 namespace engine {
 
 	class SceneNode {
-	private:
+	protected:
 		Mesh *mesh;
 		mat4 matrix;
 		vec3 color;
@@ -35,6 +35,8 @@ namespace engine {
 
 		void setColor(vec3& v) { color = v; }
 		void setTexture(Texture* t) { texture = t; }
+		virtual void setReflectionTexture(GLuint t) {};
+		virtual void setRefractionTexture(GLuint t) {};
 		void setSkybox(Texture* st) { skyboxTexture = st; }
 
 		void setShader(Shader* s) { shader = s; }
@@ -63,17 +65,17 @@ namespace engine {
 */
 		Shader *getShader() { return shader; }
 
-		void draw(mat4 &modelMatrix) {
+		virtual void draw(mat4 &modelMatrix) {
 			//draw this
 			
 			if (mesh != nullptr) {
 				shader->Use();
 				shader->LoadModelMatrix(modelMatrix * matrix);
 				shader->LoadColor(color);
-				//shader->LoadClipingPlane(clipPlane);
 				if (texture != nullptr){
 
 					shader->LoadTexture(texture);
+					glActiveTexture(GL_TEXTURE0);
 					texture->Use();
 				}
 				if (skyboxTexture != nullptr) {

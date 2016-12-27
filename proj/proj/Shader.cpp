@@ -97,6 +97,9 @@ namespace engine {
 		glUseProgram(0);
 	}
 
+	void Shader::LoadInt(GLint location, GLint i) {
+		glUniform1i(location, i);
+	}
 	void Shader::LoadFloat(GLint location, GLfloat f) {
 		glUniform1f(location, f);
 	}
