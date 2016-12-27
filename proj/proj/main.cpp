@@ -209,7 +209,7 @@ void createScene() {
 	scene->setRoot(root);
 
 	cube = new SceneNode();
-	cube->setMatrix(matFactory::Translate3(2,2,-5));
+	cube->setMatrix(matFactory::Scale3(2, 2, 2) * matFactory::Translate3(2,2,-5));
 	cube->setColor(vec3(1, 0, 0));
 	cube->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	cube->setMesh(MeshManager::Instance()->GetMesh("cube"));
@@ -217,7 +217,7 @@ void createScene() {
 	root->addNode(cube);
 
 	cube2 = new SceneNode();
-	cube2->setMatrix(matFactory::Translate3(-2, 2, -5));
+	cube2->setMatrix(matFactory::Scale3(2, 2, 2) *matFactory::Translate3(-2, 2, -5));
 	cube2->setColor(vec3(0, 1, 0));
 	cube2->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	cube2->setMesh(MeshManager::Instance()->GetMesh("cube"));
@@ -225,7 +225,7 @@ void createScene() {
 	root->addNode(cube2);
 
 	cube3 = new SceneNode();
-	cube3->setMatrix(matFactory::Translate3(0, -2, 0));
+	cube3->setMatrix(matFactory::Scale3(2, 2, 2) *matFactory::Translate3(0, -2, 0));
 	cube3->setColor(vec3(0, 0, 1));
 	cube3->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	cube3->setMesh(MeshManager::Instance()->GetMesh("cube"));

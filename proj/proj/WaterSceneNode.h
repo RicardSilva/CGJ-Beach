@@ -3,39 +3,55 @@
 
 using namespace std;
 
+const float movementSpeed = 0.00005f;
+
 namespace engine {
 
 	class WaterSceneNode : public SceneNode {
+
+		
 	private:
 		GLuint reflectionTexture;
 		GLuint refractionTexture;
+		GLuint dudvTexture;
+		float movementFactor;
+		
 
 	public:
 
-		WaterSceneNode() {}
+		WaterSceneNode() {
+			Texture *dudv = new Texture("dudvmap.png");
+			dudvTexture = dudv->TextureID();
+
+			movementFactor = 0;
+		}
 		virtual ~WaterSceneNode() {}
 		void setReflectionTexture(GLuint t) { reflectionTexture = t; }
 		void setRefractionTexture(GLuint t) { refractionTexture = t; }
 
 		virtual void draw(mat4 &modelMatrix) {
+			movementFactor += movementSpeed;
+			if (movementFactor >= 1) movementFactor -= 1;
+			shader->Use();
+			shader->LoadMovementFactor(movementFactor);
 			//draw this
-			if (mesh != nullptr) {
-				shader->Use();
-				shader->BindTextureUnits();
-				shader->LoadModelMatrix(modelMatrix * matrix);
-				shader->LoadColor(color);
+			shader->BindTextureUnits();
+			shader->LoadModelMatrix(modelMatrix * matrix);
+			shader->LoadColor(color);
 
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, reflectionTexture);
-				glActiveTexture(GL_TEXTURE1);
-				glBindTexture(GL_TEXTURE_2D, refractionTexture);
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, reflectionTexture);
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_2D, refractionTexture);
+			glActiveTexture(GL_TEXTURE2);
+			glBindTexture(GL_TEXTURE_2D, dudvTexture);
 
-				mesh->draw();
+			mesh->draw();
 
 
 				shader->UnUse();
 
-			}
+			
 
 
 			//draw children

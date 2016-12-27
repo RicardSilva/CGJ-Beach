@@ -33,22 +33,23 @@ namespace engine {
 			colorID = GetUniformLocation("Color");
 			reflectionID = GetUniformLocation("ReflectionTexture");
 			refractionID = GetUniformLocation("RefractionTexture");
+			dudvMapID = GetUniformLocation("dudvMap");
+			movementID = GetUniformLocation("movementFactor");
+
 		}
 
 		void BindTextureUnits() {
 			Shader::LoadInt(reflectionID, 0);
 			Shader::LoadInt(refractionID, 1);
+			Shader::LoadInt(dudvMapID, 2);
 		}
 
-		void LoadModelMatrix(mat4 &m) {
-			Shader::LoadMat4(modelID, m);
-		}
-		void LoadColor(vec3 &v) {
-			Shader::LoadVec3(colorID, v);
-		}
+		void LoadModelMatrix(mat4 &m) {	Shader::LoadMat4(modelID, m);}
+		void LoadColor(vec3 &v) { Shader::LoadVec3(colorID, v);	}
+		void LoadMovementFactor(float f) { Shader::LoadFloat(movementID, f); }
 		
 	private:
-		GLint modelID, colorID, reflectionID, refractionID;
+		GLint modelID, colorID, reflectionID, refractionID, dudvMapID, movementID;
 
 	};
 }

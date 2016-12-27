@@ -40,6 +40,7 @@ namespace engine {
 		virtual void LoadTexture(Texture *t) {};
 		virtual void LoadClipingPlane(vec4 &v) {};
 		virtual void BindTextureUnits() {};
+		virtual void LoadMovementFactor(float f) {};
 
 		void LoadInt(GLint location, GLint i);
 		void LoadFloat(GLint location, GLfloat f);
