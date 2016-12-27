@@ -6,6 +6,7 @@ uniform vec3 Color;
 uniform sampler2D ReflectionTexture;
 uniform sampler2D RefractionTexture;
 uniform sampler2D dudvMap;
+uniform sampler2D normalMap;
 
 uniform float movementFactor;
 
@@ -13,6 +14,10 @@ uniform float movementFactor;
 in vec4 clipSpaceCoords;
 in vec2 exTexcoord;
 in vec3 toCameraVector;
+in vec3 fromLightVector;
+in vec3 exintensities; //a.k.a the color of the light
+in float exattenuation; 
+in float exambientCoefficient; 
 
 layout(location = 0) out vec3 FragmentColor;
 
@@ -24,9 +29,10 @@ void main(void){
 	vec2 reflectTexCoords = vec2(ndc.x, -ndc.y);
 	vec2 refractTexCoords = vec2(ndc.x, ndc.y);
 	
-	vec2 distortion1 = (texture(dudvMap, vec2(exTexcoord.x + movementFactor, exTexcoord.y)).rg * 2.0 - 1.0) * distortionStrength;
-	vec2 distortion2 = (texture(dudvMap, vec2(-exTexcoord.x + movementFactor, exTexcoord.y + movementFactor)).rg * 2.0 - 1.0) * distortionStrength;
-	vec2 totalDistortion = distortion1 + distortion2;
+	vec2 distortedTexCoords = texture(dudvMap, vec2(exTexcoord.x + movementFactor, exTexcoord.y)).rg*0.1;
+	distortedTexCoords = exTexcoord + vec2(distortedTexCoords.x, distortedTexCoords.y+movementFactor);
+	vec2 totalDistortion = (texture(dudvMap, distortedTexCoords).rg * 2.0 - 1.0) * distortionStrength;
+	
 
 	reflectTexCoords += totalDistortion;
 	reflectTexCoords.x = clamp(reflectTexCoords.x, 0.001, 0.999);
@@ -40,10 +46,19 @@ void main(void){
 
 	vec3 viewVector = normalize(toCameraVector);
 	float refractiveFactor = dot(viewVector, vec3(0.0, 1.0, 0.0));
+	refractiveFactor = pow(refractiveFactor, 2);
 	
+	vec4 normalMapColor = texture(normalMap, distortedTexCoords);
+	vec3 normal = vec3(normalMapColor.r * 2.0 - 1.0, normalMapColor.b, normalMapColor.g * 2.0 - 1.0);
+	normal = normalize(normal);
+	
+	vec3 reflectedLight = reflect(normalize(fromLightVector), normal);
+	float specular = max(dot(reflectedLight, viewVector), 0.0);
+	specular = pow(specular, 20.0);
+	vec3 specularHighlights = exintensities * specular * 0.4;
 	
 	FragmentColor = mix(reflectColor, refractColor, refractiveFactor).xyz;
-	FragmentColor = mix(FragmentColor, vec3(0.0, 0.3, 0.5), 0.2);
+	FragmentColor = mix(FragmentColor, vec3(0.0, 0.3, 0.5), 0.2) + specularHighlights;
 	
 	
 }

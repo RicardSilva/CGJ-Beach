@@ -14,6 +14,7 @@ namespace engine {
 		GLuint reflectionTexture;
 		GLuint refractionTexture;
 		GLuint dudvTexture;
+		GLuint normalTexture;
 		float movementFactor;
 		
 
@@ -22,6 +23,8 @@ namespace engine {
 		WaterSceneNode() {
 			Texture *dudv = new Texture("dudvmap.png");
 			dudvTexture = dudv->TextureID();
+			Texture *normal = new Texture("waterNormalMap.png");
+			normalTexture = normal->TextureID();
 
 			movementFactor = 0;
 		}
@@ -45,6 +48,8 @@ namespace engine {
 			glBindTexture(GL_TEXTURE_2D, refractionTexture);
 			glActiveTexture(GL_TEXTURE2);
 			glBindTexture(GL_TEXTURE_2D, dudvTexture);
+			glActiveTexture(GL_TEXTURE3);
+			glBindTexture(GL_TEXTURE_2D, normalTexture);
 
 			mesh->draw();
 

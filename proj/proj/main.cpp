@@ -225,7 +225,7 @@ void createScene() {
 	root->addNode(cube2);
 
 	cube3 = new SceneNode();
-	cube3->setMatrix(matFactory::Scale3(2, 2, 2) *matFactory::Translate3(0, -2, 0));
+	cube3->setMatrix(matFactory::Scale3(10, 2, 10) *matFactory::Translate3(0, -2, 0));
 	cube3->setColor(vec3(0, 0, 1));
 	cube3->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	cube3->setMesh(MeshManager::Instance()->GetMesh("cube"));

@@ -63,14 +63,20 @@ namespace engine {
 			glGetActiveUniformBlockiv(shader->GetProgram(), UboID,
 				GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize);
 			GLubyte * blockBuffer = (GLubyte *)malloc(blockSize);
-			const GLchar *names[] = { "ViewMatrix", "ProjectionMatrix", "ClipingPlane" };
-			GLuint indices[3];
-			glGetUniformIndices(shader->GetProgram(), 3, names, indices);
-			GLint offset[3];
-			glGetActiveUniformsiv(shader->GetProgram(), 3, indices, GL_UNIFORM_OFFSET, offset);
+			const GLchar *names[] = { "ViewMatrix", "ProjectionMatrix", "ClipingPlane", "lightPosition", "intensities", "attenuation", "ambientCoefficient" };
+			GLuint indices[7];
+			glGetUniformIndices(shader->GetProgram(), 7, names, indices);
+			GLint offset[7];
+			GLfloat atten = 20.0f;
+			GLfloat ambient = 0.05f;
+			glGetActiveUniformsiv(shader->GetProgram(), 7, indices, GL_UNIFORM_OFFSET, offset);
 			memcpy(blockBuffer + offset[0], camera->getViewMatrix().Transposed().Export(),	sizeof(mat4));
 			memcpy(blockBuffer + offset[1], camera->getProjMatrix().Transposed().Export(),	sizeof(mat4));
 			memcpy(blockBuffer + offset[2], camera->getClippingPlane().Export(), sizeof(vec4));
+			memcpy(blockBuffer + offset[3], new vec3(-5, 10, -5), sizeof(vec3));
+			memcpy(blockBuffer + offset[4], new vec3(1, 1, 1), sizeof(vec3));
+			memcpy(blockBuffer + offset[5], &atten, sizeof(GLfloat));
+			memcpy(blockBuffer + offset[6], &ambient, sizeof(GLfloat));
 			
 			GLuint uboHandle;
 			glGenBuffers(1, &uboHandle);
