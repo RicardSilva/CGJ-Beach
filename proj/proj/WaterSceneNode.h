@@ -15,6 +15,7 @@ namespace engine {
 		GLuint refractionTexture;
 		GLuint dudvTexture;
 		GLuint normalTexture;
+		GLuint depthTexture;
 		float movementFactor;
 		
 
@@ -31,10 +32,12 @@ namespace engine {
 		virtual ~WaterSceneNode() {}
 		void setReflectionTexture(GLuint t) { reflectionTexture = t; }
 		void setRefractionTexture(GLuint t) { refractionTexture = t; }
+		void setDepthTexture(GLuint t) { depthTexture = t; }
 
 		virtual void draw(mat4 &modelMatrix) {
 			movementFactor += movementSpeed;
 			if (movementFactor >= 1) movementFactor -= 1;
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			shader->Use();
 			shader->LoadMovementFactor(movementFactor);
 			//draw this
@@ -50,12 +53,14 @@ namespace engine {
 			glBindTexture(GL_TEXTURE_2D, dudvTexture);
 			glActiveTexture(GL_TEXTURE3);
 			glBindTexture(GL_TEXTURE_2D, normalTexture);
+			glActiveTexture(GL_TEXTURE4);
+			glBindTexture(GL_TEXTURE_2D, depthTexture);
 
 			mesh->draw();
 
 
-				shader->UnUse();
-
+			shader->UnUse();
+			glDisable(GL_BLEND);
 			
 
 

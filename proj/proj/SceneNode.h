@@ -35,8 +35,6 @@ namespace engine {
 
 		void setColor(vec3& v) { color = v; }
 		void setTexture(Texture* t) { texture = t; }
-		virtual void setReflectionTexture(GLuint t) {};
-		virtual void setRefractionTexture(GLuint t) {};
 		void setSkybox(Texture* st) { skyboxTexture = st; }
 
 		void setShader(Shader* s) { shader = s; }
@@ -64,6 +62,12 @@ namespace engine {
 		}
 */
 		Shader *getShader() { return shader; }
+
+
+		virtual void setReflectionTexture(GLuint t) {};
+		virtual void setRefractionTexture(GLuint t) {};
+		virtual void setDepthTexture(GLuint t) {};
+
 
 		virtual void draw(mat4 &modelMatrix) {
 			//draw this

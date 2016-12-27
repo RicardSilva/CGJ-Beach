@@ -183,11 +183,11 @@ void createCameras() {
 	mainCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
 	mainCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 50));
 
-	upCamera = new Camera(vec4(0, -1, 0, 0));
+	upCamera = new Camera(vec4(0, -1, 0, 0.5));
 	upCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
 	upCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 50));
 
-	downCamera = new Camera(vec4(0, 1, 0, 0));
+	downCamera = new Camera(vec4(0, 1, 0, 0.5));
 	downCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
 	downCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 50));
 }
@@ -240,6 +240,7 @@ void createScene() {
 
 	water->setReflectionTexture(wfbos->getReflectionTexture());
 	water->setRefractionTexture(wfbos->getRefractionTexture());
+	water->setDepthTexture(wfbos->getRefractionDepthTexture());
 	
 
 	checkOpenGLError("ERROR: Could not build scene.");

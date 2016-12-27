@@ -38,6 +38,7 @@ namespace engine {
 			normalMapID = GetUniformLocation("normalMap");
 			lightPositionID = GetUniformLocation("lightPosition");
 			lightColorID = GetUniformLocation("intensities");
+			depthMapID = GetUniformLocation("depthMap");
 
 		}
 
@@ -46,6 +47,7 @@ namespace engine {
 			Shader::LoadInt(refractionID, 1);
 			Shader::LoadInt(dudvMapID, 2);
 			Shader::LoadInt(normalMapID, 3);
+			Shader::LoadInt(depthMapID, 4);
 		}
 
 		void LoadModelMatrix(mat4 &m) {	Shader::LoadMat4(modelID, m);}
@@ -53,7 +55,7 @@ namespace engine {
 		void LoadMovementFactor(float f) { Shader::LoadFloat(movementID, f); }
 		
 	private:
-		GLint modelID, colorID, reflectionID, refractionID, dudvMapID, normalMapID, movementID, lightPositionID, lightColorID;
+		GLint modelID, colorID, reflectionID, refractionID, dudvMapID, normalMapID, depthMapID, movementID, lightPositionID, lightColorID;
 
 	};
 }
