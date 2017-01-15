@@ -1,4 +1,4 @@
-﻿Build started 27/12/2016 08:37:35.
+﻿Build started 15/01/2017 02:11:57.
      1>Project "C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\proj.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /I"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\..\dependencies\freeglut\include" /I"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\..\dependencies\glew\include" /I"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\..\dependencies\soil\src" /Zi /nologo /W3 /WX- /sdl /O2 /Oi /GL /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\obj\x64\Release\\" /Fd"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\obj\x64\Release\vc140.pdb" /Gd /TP /errorReport:prompt main.cpp
@@ -20,13 +20,13 @@
          "C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\obj\x64\Release\TextureManager.obj"
          "C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\obj\x64\Release\vec.obj"
          Generating code
-         3 of 1491 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+         1 of 1492 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
            0 functions were new in current compilation
-           0 functions had inline decision re-evaluated but remain unchanged
+           1 functions had inline decision re-evaluated but remain unchanged
          Finished generating code
          proj.vcxproj -> C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\bin\x64\Release\proj.exe
      1>Done Building Project "C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\proj.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:08.99
+Time Elapsed 00:00:02.03
