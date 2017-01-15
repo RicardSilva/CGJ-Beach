@@ -6,26 +6,16 @@ using namespace std;
 
 namespace engine {
 
-	Shader::Shader()
-	{
-		totalShaders = 0;
-		shaders[VERTEX_SHADER] = 0;
-		shaders[FRAGMENT_SHADER] = 0;
-
-	}
 	Shader::Shader(const std::string& vertexShader, const std::string& fragmentShader) {
 		totalShaders = 0;
 		shaders[VERTEX_SHADER] = 0;
 		shaders[FRAGMENT_SHADER] = 0;
-		
-	}
-	void Shader::Init(const std::string& vertexShader, const std::string& fragmentShader) {
+
 		LoadFromFile(GL_VERTEX_SHADER, vertexShader);
 		LoadFromFile(GL_FRAGMENT_SHADER, fragmentShader);
 		CreateProgram();
-		BindAttributes();
 		LinkProgram();
-		GetUniformLocations();
+		
 	}
 
 	Shader::~Shader()

@@ -37,7 +37,7 @@ namespace engine {
 		void setTexture(Texture* t) { texture = t; }
 		void setSkybox(Texture* st) { skyboxTexture = st; }
 
-		void setShader(Shader* s) { shader = s; }
+		virtual void setShader(Shader* s) { shader = s; }
 		/*void setShaderSkybox(Shader* s) {
 			shader = s;
 			viewId = s->GetUniformLocation("ViewMatrix");

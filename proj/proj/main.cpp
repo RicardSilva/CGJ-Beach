@@ -128,13 +128,11 @@ void checkOpenGLError(std::string error)
 void createShaders()
 {
 	//waterShader
-	Shader *waterShader = new WaterShader();
-	waterShader->Init("WaterVerticeShader.glsl", "WaterFragmentShader.glsl");
+	Shader *waterShader = new WaterShader("WaterVerticeShader.glsl", "WaterFragmentShader.glsl");
 	ShaderManager::Instance()->AddShader("waterShader", waterShader);
 
 	//simpleCubeShader
-	Shader *cubeShader = new CubeShader();
-	cubeShader->Init("CubeVerticeShader.glsl", "CubeFragmentShader.glsl");
+	Shader *cubeShader = new CubeShader("CubeVerticeShader.glsl", "CubeFragmentShader.glsl");
 	ShaderManager::Instance()->AddShader("cubeShader", cubeShader);
 
 	checkOpenGLError("ERROR: Could not create shaders.");
@@ -237,7 +235,6 @@ void createScene() {
 	water->setColor(vec3(1, 1, 0));
 	water->setShader(ShaderManager::Instance()->GetShader("waterShader"));
 	water->setMesh(MeshManager::Instance()->GetMesh("cube"));
-
 	water->setReflectionTexture(wfbos->getReflectionTexture());
 	water->setRefractionTexture(wfbos->getRefractionTexture());
 	water->setDepthTexture(wfbos->getRefractionDepthTexture());
@@ -258,7 +255,7 @@ void drawScene()
 	scene->setCamera(downCamera);
 	scene->draw();
 
-	//render refractions
+	//render refraction
 	wfbos->bindRefractionFrameBuffer();
 	scene->setCamera(upCamera);
 	scene->draw();
@@ -291,7 +288,7 @@ void display()
 	++FrameCount;
 	
 	wfbos->bindReflectionFrameBuffer();
-	glClearColor(0.0f, 0.8f, 1.0f, 1.0f);
+	//glClearColor(0.0f, 0.8f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	wfbos->bindRefractionFrameBuffer();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

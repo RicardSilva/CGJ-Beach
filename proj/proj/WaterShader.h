@@ -17,8 +17,10 @@ namespace engine {
 	{
 
 	public:
-		WaterShader() : Shader() {}
-		WaterShader(const std::string& vertexShader, const std::string& fragmentShader) : Shader(vertexShader, fragmentShader) {}
+		WaterShader(const std::string& vertexShader, const std::string& fragmentShader) : Shader(vertexShader, fragmentShader) {
+			BindAttributes();
+			GetUniformLocations();
+		}
 		virtual ~WaterShader() {}
 		
 		void BindAttributes(void) {

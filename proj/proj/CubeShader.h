@@ -17,8 +17,10 @@ namespace engine {
 	{
 
 	public:
-		CubeShader() : Shader() {}
-		CubeShader(const std::string& vertexShader, const std::string& fragmentShader) : Shader(vertexShader, fragmentShader) {}
+		CubeShader(const std::string& vertexShader, const std::string& fragmentShader) : Shader(vertexShader, fragmentShader) {
+			BindAttributes();
+			GetUniformLocations();
+		}
 		virtual ~CubeShader() {}
 
 		void BindAttributes(void) {

@@ -23,6 +23,7 @@ namespace engine {
 		for (auto element : map) {
 			delete(element.second);
 		}
+		delete(_instance);
 	}
 
 

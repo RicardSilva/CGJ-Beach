@@ -23,6 +23,7 @@ void MeshManager::Destroy() {
 	for (auto element : map) {
 		delete(element.second);
 	}
+	delete(_instance);
 }
 
 

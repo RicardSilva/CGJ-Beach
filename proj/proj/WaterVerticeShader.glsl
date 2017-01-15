@@ -24,7 +24,7 @@ uniform SharedMatrices
 	float ambientCoefficient; 
 };
 
-const float tilling = 2.0; //FIXME: ADJUST TO WATER QUAD SIZE
+const float tilling = 1.0; //FIXME: ADJUST TO WATER QUAD SIZE
 
 void main(void){
 

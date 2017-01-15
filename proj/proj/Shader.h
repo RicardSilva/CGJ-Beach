@@ -14,10 +14,9 @@ namespace engine {
 	class Shader
 	{
 
+
 	public:
-		Shader(void);
 		Shader(const std::string& vertexShader, const std::string& fragmentShader);
-		void Init(const std::string& vertexShader, const std::string& fragmentShader);
 		virtual ~Shader(void);
 		void LoadFromString(GLenum whichShader, const std::string& source);
 		void LoadFromFile(GLenum whichShader, const std::string& filename);
