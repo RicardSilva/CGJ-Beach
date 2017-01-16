@@ -24,6 +24,7 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="MeshGenerator.h" />
+    <ClInclude Include="SandSceneNode.h" />
     <ClInclude Include="SkyboxSceneNode.h" />
     <ClInclude Include="SkyboxShader.h" />
     <ClInclude Include="WaterFrameBuffers.h" />

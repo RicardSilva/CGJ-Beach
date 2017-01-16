@@ -250,7 +250,7 @@ void createScene() {
 	skybox->setShader(ShaderManager::Instance()->GetShader("skyboxShader"));
 	skybox->setMesh(MeshManager::Instance()->GetMesh("quad"));
 	skybox->setColor(vec3(1, 0, 0));
-	//root->addNode(skybox);
+	root->addNode(skybox);
 
 	cube = new SceneNode();
 	cube->setMatrix(matFactory::Scale3(2, 2, 2) * matFactory::Translate3(2,2,-2));
@@ -268,14 +268,14 @@ void createScene() {
 	cube2->setTexture(TextureManager::Instance()->GetTexture("cat"));
 	root->addNode(cube2);
 
-	sand = new SceneNode();
+	sand = new SandSceneNode();
 	sand->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(-50, -2, -50));
 	sand->setColor(vec3(0, 0, 1));
 	sand->setShader(ShaderManager::Instance()->GetShader("sandShader"));
 	sand->setMesh(MeshManager::Instance()->GetMesh("sand"));
 	sand->setMaterial(MaterialManager::Instance()->GetMaterial("sand"));
 	sand->setTexture(TextureManager::Instance()->GetTexture("sand"));
-	//root->addNode(sand);
+	root->addNode(sand);
 
 
 	water = new WaterSceneNode();
@@ -315,7 +315,7 @@ void drawScene()
 
 	//render water
 	water->draw(matFactory::Identity4());
-	sand->draw(matFactory::Identity4());
+	//sand->draw(matFactory::Identity4());
 
 	checkOpenGLError("ERROR: Could not draw scene.");
 }
