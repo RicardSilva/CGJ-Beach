@@ -21,5 +21,7 @@
 #include "SkyboxTexture.h"
 #include "TextureManager.h"
 #include "WaterFrameBuffers.h"
+#include "Material.h"
+#include "MaterialManager.h"
 
 int WinX = 640, WinY = 480;

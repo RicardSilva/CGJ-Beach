@@ -18,8 +18,6 @@ namespace engine {
 		GLuint indices[7];
 		GLint offset[7];
 		GLchar *names[7]; 
-
-		
 	
 		SceneGraph(Camera *camera, Shader *shader)
 		{
@@ -62,7 +60,7 @@ namespace engine {
 			memcpy(blockBuffer + offset[0], camera->getViewMatrix().Transposed().Export(), sizeof(mat4));
 			memcpy(blockBuffer + offset[1], camera->getProjMatrix().Transposed().Export(), sizeof(mat4));
 			memcpy(blockBuffer + offset[2], camera->getClippingPlane().Export(), sizeof(vec4));
-			memcpy(blockBuffer + offset[3], new vec3(80, 10, 50), sizeof(vec3));
+			memcpy(blockBuffer + offset[3], new vec3(50, 10, 50), sizeof(vec3));
 			memcpy(blockBuffer + offset[4], new vec3(1, 1, 1), sizeof(vec3));
 			memcpy(blockBuffer + offset[5], &atten, sizeof(GLfloat));
 			memcpy(blockBuffer + offset[6], &ambient, sizeof(GLfloat));

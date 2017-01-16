@@ -16,7 +16,7 @@ namespace engine {
 		Shader *shader;
 		Texture *texture;
 		vector<SceneNode*> nodes;
-
+		Material *material;
 		GLint  skyboxID;
 
 	public:
@@ -31,6 +31,9 @@ namespace engine {
 
 		void setMesh(Mesh* m) { mesh = m; }
 		Mesh *getMesh() { return mesh; }
+
+		void setMaterial(Material* m) { material = m; }
+		Material getMaterial(){ return *material; }
 
 		void setColor(vec3& v) { color = v; }
 		void setTexture(Texture* t) { texture = t; }

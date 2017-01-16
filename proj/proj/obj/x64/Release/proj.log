@@ -1,4 +1,4 @@
-﻿Build started 1/16/2017 5:50:05 PM.
+﻿Build started 1/16/2017 9:39:08 PM.
      1>Project "C:\Users\Tomasz\Documents\GitHub\CGJ_TeamProject\proj\proj\proj.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /IC:\Users\Tomasz\Documents\GitHub\CGJ_TeamProject\proj\..\dependencies\freeglut\include /IC:\Users\Tomasz\Documents\GitHub\CGJ_TeamProject\proj\..\dependencies\glew\include /IC:\Users\Tomasz\Documents\GitHub\CGJ_TeamProject\proj\..\dependencies\soil\src /Zi /nologo /W3 /WX- /sdl /O2 /Oi /GL /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"C:\Users\Tomasz\Documents\GitHub\CGJ_TeamProject\proj\proj\\obj\x64\Release\\" /Fd"C:\Users\Tomasz\Documents\GitHub\CGJ_TeamProject\proj\proj\\obj\x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt main.cpp
@@ -37,4 +37,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:05.18
+Time Elapsed 00:00:04.93
