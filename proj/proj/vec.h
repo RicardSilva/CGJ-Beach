@@ -57,6 +57,9 @@ namespace engine {
 		friend vec2 operator*(float scalar, const vec2 &v) {
 			return vec2(v.x*scalar, v.y*scalar);
 		}
+		friend vec2 operator*(const vec2 &v, const vec2 &v2) {
+			return vec2(v.x*v2.x, v.y*v2.y);
+		}
 		friend vec2 operator/(const vec2 &v, float scalar) {
 			scalar = 1.0f / scalar;
 			return vec2(v.x*scalar, v.y*scalar);

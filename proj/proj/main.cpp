@@ -135,6 +135,10 @@ void createShaders()
 	Shader *cubeShader = new CubeShader("CubeVerticeShader.glsl", "CubeFragmentShader.glsl");
 	ShaderManager::Instance()->AddShader("cubeShader", cubeShader);
 
+	//sandShader
+	Shader *sandShader = new CubeShader("VerticeShaderSand.glsl", "FragmentShaderSand.glsl");
+	ShaderManager::Instance()->AddShader("sandShader", sandShader);
+
 	checkOpenGLError("ERROR: Could not create shaders.");
 }
 void destroyShaders()
@@ -148,6 +152,8 @@ void createTextures() {
 	TextureManager::Instance()->AddTexture("dog", dogTexture);
 	Texture *catTexture = new Texture("csample.png");
 	TextureManager::Instance()->AddTexture("cat", catTexture);
+	Texture *sandTexture = new Texture("sand2.jpg");
+	TextureManager::Instance()->AddTexture("sand", sandTexture);
 
 	vector<const GLchar*> faces;
 	faces.push_back("right.jpg");
@@ -171,6 +177,8 @@ void destroyTextures()
 void createMeshes() {
 	Mesh* cubeMesh = new Mesh(std::string("cube.obj"));
 	MeshManager::Instance()->AddMesh("cube", cubeMesh);
+	Mesh* sandMesh = new Mesh();
+	MeshManager::Instance()->AddMesh("sand", sandMesh);
 	checkOpenGLError("ERROR: Could not create meshes.");
 }
 void destroyMeshes() {
@@ -223,11 +231,11 @@ void createScene() {
 	root->addNode(cube2);
 
 	cube3 = new SceneNode();
-	cube3->setMatrix(matFactory::Scale3(10, 2, 10) *matFactory::Translate3(0, -2, 0));
+	cube3->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(-50, -2, -50));
 	cube3->setColor(vec3(0, 0, 1));
-	cube3->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
-	cube3->setMesh(MeshManager::Instance()->GetMesh("cube"));
-	cube3->setTexture(TextureManager::Instance()->GetTexture("cat"));
+	cube3->setShader(ShaderManager::Instance()->GetShader("sandShader"));
+	cube3->setMesh(MeshManager::Instance()->GetMesh("sand"));
+	cube3->setTexture(TextureManager::Instance()->GetTexture("sand"));
 	root->addNode(cube3);
 
 	water = new WaterSceneNode();

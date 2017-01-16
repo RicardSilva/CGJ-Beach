@@ -1,0 +1,15 @@
+# Blender MTL File: 'sanddunes.blend'
+# Material Count: 1
+
+newmtl Material.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.471933 0.471933 0.471933
+Ks 0.600000 0.600000 0.600000
+Ke 0.600000 0.600000 0.600000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Bump -bm 0.100000 -s 0.100000 0.100000 0.100000 darksand.jpg
+map_Ka -s 0.100000 0.100000 0.100000 darksand.jpg
+map_Kd -s 0.100000 0.100000 0.100000 darksand.jpg

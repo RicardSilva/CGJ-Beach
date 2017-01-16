@@ -8,6 +8,7 @@
 #include <fstream>
 #include "Shader.h"
 #include "mat.h"
+#include "MeshGenerator.h"
 
 typedef struct {
 	GLfloat x, y, z;
@@ -47,17 +48,65 @@ namespace engine {
 
 	public:
 
+		bool isSand;
+
+		Mesh(){
+			isSand = true;
+			GenerateRandomNoiseMesh(100, 100);
+			processMeshData();
+			freeMeshData();
+			createBufferObjects();
+		}
+
 		Mesh(std::string& filename)
 		{
+			isSand = false;
 			loadMeshData(filename);
 			processMeshData();
 			freeMeshData();
 			createBufferObjects();
 			
 		}
+
 		virtual ~Mesh() {
 			destroyBufferObjects();
 		}
+
+		void GenerateRandomNoiseMesh(int width, int height){
+
+			MeshGenerator meshGen = *new MeshGenerator(width, height);
+			for (int i = 0; i < meshGen.getVerticesCount(width, height); i = i + 3){
+				Vertex v;
+				v.x = meshGen.vertices[i];
+				v.y = meshGen.vertices[i + 1];
+				v.z = meshGen.vertices[i + 2];
+				vertexData.push_back(v);
+			}
+
+			for (int i = 0; i < meshGen.getIndicesCount(height, height); i++){
+				vertexIdx.push_back(meshGen.indices[i]);
+			}
+			int k = 0;
+			for (int i = 0; i < vertexIdx.size(); i++) {
+				Vertex v = vertexData[vertexIdx[i]];
+				vec3 normal = meshGen.calculateNormal(v);
+				Normal n = *new Normal();
+				n.nx = normal.x;
+				n.ny = normal.y;
+				n.nz = normal.z;
+				normalData.push_back(n);
+				Texcoord t = *new Texcoord();
+				t.u = i;
+				t.v = i;
+				texcoordData.push_back(t);
+				normalIdx.push_back(i + 1);
+				texcoordIdx.push_back(vertexIdx[i]);
+			}
+
+			TexcoordsLoaded = true;
+			NormalsLoaded = true;
+		}
+
 
 		void parseVertex(std::stringstream& sin)
 		{
@@ -196,9 +245,10 @@ namespace engine {
 
 		void draw() {
 			glBindVertexArray(VaoId);
-			
-			glDrawArrays(GL_TRIANGLES, 0, (GLsizei)Vertices.size());
-
+			if (isSand)
+				glDrawArrays(GL_TRIANGLE_STRIP, 0, (GLsizei)Vertices.size());
+			else
+				glDrawArrays(GL_TRIANGLES, 0, (GLsizei)Vertices.size());
 			glBindVertexArray(0);
 		}
 		
