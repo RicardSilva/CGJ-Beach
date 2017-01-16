@@ -24,8 +24,18 @@ namespace engine{
 		int height;
 		float* vertices = 0;
 		int* indices = 0;
+		bool isFlat = false;
 
 		MeshGenerator(int w, int h){
+			isFlat = false;
+			width = w;
+			height = h;
+			getVertices(w, h);
+			getIndices(w, h);
+		};
+
+		MeshGenerator(int w, int h, bool i){
+			isFlat = i;
 			width = w;
 			height = h;
 			getVertices(w, h);
@@ -50,7 +60,10 @@ namespace engine{
 				for (int col = 0; col < width; col++) {
 					double c = (double)col;
 					vertices[i++] = (float)col;
-					vertices[i++] = (rand(*new vec2(col, row)) + atan((c - 50) / 10) * 5);
+					if (!isFlat)
+						vertices[i++] = (rand(*new vec2(col, row)) + atan((c - 50) / 10) * 5);
+					else
+						vertices[i++] = atan((c - 50) / 10) * 5;
 					vertices[i++] = (float)row;
 				}
 			}

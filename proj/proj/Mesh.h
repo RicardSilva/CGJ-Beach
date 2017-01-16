@@ -49,8 +49,10 @@ namespace engine {
 	public:
 
 		bool isSand;
+		bool isFlat;
 
-		Mesh(){
+		Mesh(bool flat){
+			isFlat = flat;
 			isSand = true;
 			GenerateRandomNoiseMesh(100, 100);
 			processMeshData();
@@ -74,7 +76,7 @@ namespace engine {
 
 		void GenerateRandomNoiseMesh(int width, int height){
 
-			MeshGenerator meshGen = *new MeshGenerator(width, height);
+			MeshGenerator meshGen = *new MeshGenerator(width, height, isFlat);
 			for (int i = 0; i < meshGen.getVerticesCount(width, height); i = i + 3){
 				Vertex v;
 				v.x = meshGen.vertices[i];

@@ -50,60 +50,6 @@ struct Light {
 	float attenuation;
 	float ambientCoefficient; 
 };
-///// MATERIAL PARSING
-
-void extractMTLdata(string fp, string* materials, float diffuses[][3], float speculars[][3])
-{
-	// Counters
-	int m = 0;
-	int d = 0;
-	int s = 0;
-
-	// Open MTL file
-	ifstream inMTL;
-	inMTL.open(fp);
-	if (!inMTL.good())
-	{
-		cout << "ERROR OPENING MTL FILE" << endl;
-		exit(1);
-	}
-
-	// Read MTL file
-	while (!inMTL.eof())
-	{
-		string line;
-		getline(inMTL, line);
-		string type = line.substr(0, 2);
-
-		// Names
-		if (type.compare("ne") == 0)
-		{
-			// 1
-			// Extract token
-			string l = "newmtl ";
-			materials[m] = line.substr(l.size());
-			m++;
-		}
-
-		// 2
-		// Diffuses
-		else if (type.compare("Kd") == 0)
-		{
-			// Implementation challenge!
-		}
-
-		// 3
-		// Speculars
-		else if (type.compare("Ks") == 0)
-		{
-			// Implementation challenge!
-		}
-	}
-
-	// Close MTL file
-	inMTL.close();
-}
-
 
 /////////////////////////////////////////////////////////////////////// ERRORS
 
@@ -141,6 +87,9 @@ void createShaders()
 	//sandShader
 	Shader *sandShader = new CubeShader("VerticeShaderSand.glsl", "FragmentShaderSand.glsl");
 	ShaderManager::Instance()->AddShader("sandShader", sandShader);
+	//flatSandShader
+	Shader *flatSandShader = new CubeShader("VerticeShaderSand.glsl", "FragmentShaderFlatSand.glsl");
+	ShaderManager::Instance()->AddShader("flatSandShader", flatSandShader);
 
 	//skybox shader
 	Shader *skyboxShader = new SkyboxShader("SkyboxVerticeShader.glsl", "SkyboxFragmentShader.glsl");
@@ -185,8 +134,11 @@ void createMeshes() {
 	Mesh* cubeMesh = new Mesh(std::string("cube.obj"));
 	MeshManager::Instance()->AddMesh("cube", cubeMesh);
 
-	Mesh* sandMesh = new Mesh();
+	Mesh* sandMesh = new Mesh(false);
 	MeshManager::Instance()->AddMesh("sand", sandMesh);
+
+	Mesh* sandMeshFlat = new Mesh(true);
+	MeshManager::Instance()->AddMesh("sandFlat", sandMeshFlat);
 
 	Mesh* quadMesh = new Mesh(std::string("quad.obj"));
 	MeshManager::Instance()->AddMesh("quad", quadMesh);
@@ -235,7 +187,8 @@ void createScene() {
 	wfbos = new WaterFrameBuffers();
 	scene = new SceneGraph(mainCamera, ShaderManager::Instance()->GetShader("waterShader"));
 
-	SceneNode *root, *cube, *cube2, *skybox;
+	SceneNode *root, *cube, *cube2, *sandFlat, *skybox;
+
 	Texture * skyboxTexture;
 
 	root = new SceneNode();
@@ -270,12 +223,20 @@ void createScene() {
 
 	sand = new SandSceneNode();
 	sand->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(-50, -2, -50));
-	sand->setColor(vec3(0, 0, 1));
 	sand->setShader(ShaderManager::Instance()->GetShader("sandShader"));
 	sand->setMesh(MeshManager::Instance()->GetMesh("sand"));
 	sand->setMaterial(MaterialManager::Instance()->GetMaterial("sand"));
 	sand->setTexture(TextureManager::Instance()->GetTexture("sand"));
 	root->addNode(sand);
+
+
+	sandFlat = new FlatSandSceneNode();
+	sandFlat->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(-50, -2, -50));
+	sandFlat->setShader(ShaderManager::Instance()->GetShader("flatSandShader"));
+	sandFlat->setMesh(MeshManager::Instance()->GetMesh("sandFlat"));
+	sandFlat->setMaterial(MaterialManager::Instance()->GetMaterial("sand"));
+	sandFlat->setTexture(TextureManager::Instance()->GetTexture("sand"));
+	root->addNode(sandFlat);
 
 
 	water = new WaterSceneNode();

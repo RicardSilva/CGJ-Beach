@@ -5,7 +5,7 @@ using namespace std;
 
 namespace engine {
 
-	class SandSceneNode : public SceneNode {
+	class FlatSandSceneNode : public SceneNode {
 
 
 	private:
@@ -16,10 +16,10 @@ namespace engine {
 
 	public:
 
-		SandSceneNode() {
+		FlatSandSceneNode() {
 		}
 
-		virtual ~SandSceneNode() {}
+		virtual ~FlatSandSceneNode() {}
 
 		void setShader(Shader* s) {
 			shader = s;
@@ -35,22 +35,14 @@ namespace engine {
 		void setTexture(GLuint t) { Texture = t; }
 
 		virtual void draw(mat4 &modelMatrix) {
-			
+
 			shader->Use();
 			shader->LoadModelMatrix(modelMatrix * matrix);
 
-			shader->LoadTexture(texture);
-			glActiveTexture(GL_TEXTURE0);
-			texture->Use();
-			glUniform3fv(Ks, 1, material->getKs().Export());
-			glUniform3fv(Kd, 1, material->getKd().Export());
-			glUniform1f(N, material->getNs());
-
+			glCullFace(GL_FRONT);
 			mesh->draw();
-
-			texture->UnUse();
+			glCullFace(GL_BACK);
 			shader->UnUse();
-			glDisable(GL_BLEND);
 
 
 
@@ -60,5 +52,4 @@ namespace engine {
 		}
 
 	};
-
 }
