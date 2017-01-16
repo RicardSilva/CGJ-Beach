@@ -369,22 +369,23 @@ void screenshot(const std::string& filename, int x, int y)
 	delete[] data;
 	data = NULL;
 }
+
+void screenshotPNG(const std::string& filename) {
+	int w = glutGet(GLUT_WINDOW_WIDTH);
+	int h = glutGet(GLUT_WINDOW_HEIGHT);
+	SOIL_save_screenshot(filename.c_str(), SOIL_SAVE_TYPE_BMP,0,0, w, h);
+}
+
 void myKeydown(unsigned char key, int x, int y) {
 	key = tolower(key);
 	switch (key) {
 	case('p') :
 		unsigned long milliseconds_since_epoch =
-		std::chrono::duration_cast<std::chrono::milliseconds>
-		(std::chrono::system_clock::now().time_since_epoch()).count();
-		std::cout << milliseconds_since_epoch << std::endl;
-		screenshot(std::string("../../printscreens/") + std::to_string(milliseconds_since_epoch) + std::string(".tga"), WinX, WinY);
-		
+		std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+		screenshotPNG(std::string("../../printscreens/") + std::to_string(milliseconds_since_epoch) + std::string(".bmp"));
 		break;
 	}
 }
-
-
-
 //void mouseWheel(int button, int dir, int x, int y)
 //{
 //	if (dir > 0) {
