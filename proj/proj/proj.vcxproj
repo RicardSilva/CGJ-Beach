@@ -21,6 +21,8 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CubeShader.h" />
+    <ClInclude Include="SkyboxSceneNode.h" />
+    <ClInclude Include="SkyboxShader.h" />
     <ClInclude Include="WaterFrameBuffers.h" />
     <ClInclude Include="WaterSceneNode.h" />
     <ClInclude Include="WaterShader.h" />

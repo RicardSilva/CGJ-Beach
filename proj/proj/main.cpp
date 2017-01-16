@@ -135,6 +135,10 @@ void createShaders()
 	Shader *cubeShader = new CubeShader("CubeVerticeShader.glsl", "CubeFragmentShader.glsl");
 	ShaderManager::Instance()->AddShader("cubeShader", cubeShader);
 
+	//skybox shader
+	Shader *skyboxShader = new SkyboxShader("SkyboxVerticeShader.glsl", "SkyboxFragmentShader.glsl");
+	ShaderManager::Instance()->AddShader("skyboxShader", skyboxShader);
+
 	checkOpenGLError("ERROR: Could not create shaders.");
 }
 void destroyShaders()
@@ -150,12 +154,12 @@ void createTextures() {
 	TextureManager::Instance()->AddTexture("cat", catTexture);
 
 	vector<const GLchar*> faces;
-	faces.push_back("right.jpg");
-	faces.push_back("left.jpg");
-	faces.push_back("top.jpg");
-	faces.push_back("bottom.jpg");
-	faces.push_back("back.jpg");
-	faces.push_back("front.jpg");
+	faces.push_back("Box_Right.bmp");
+	faces.push_back("Box_Left.bmp");
+	faces.push_back("Box_Top.bmp");
+	faces.push_back("Box_Bottom.bmp");
+	faces.push_back("Box_Back.bmp");
+	faces.push_back("Box_Front.bmp");
 
 	Texture *skyboxTexture = new SkyboxTexture(faces);
 	TextureManager::Instance()->AddTexture("skybox", skyboxTexture);
@@ -171,23 +175,27 @@ void destroyTextures()
 void createMeshes() {
 	Mesh* cubeMesh = new Mesh(std::string("cube.obj"));
 	MeshManager::Instance()->AddMesh("cube", cubeMesh);
+
+	Mesh* quadMesh = new Mesh(std::string("quad.obj"));
+	MeshManager::Instance()->AddMesh("quad", quadMesh);
 	checkOpenGLError("ERROR: Could not create meshes.");
 }
 void destroyMeshes() {
 	MeshManager::Instance()->Destroy();
 }
+
 void createCameras() {
 	mainCamera = new Camera(vec4());
 	mainCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
-	mainCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 50));
+	mainCamera->setProjMatrix(matFactory::PerspectiveProjection(45, (float)WinX / WinY, 0.1f, 50));
 
 	upCamera = new Camera(vec4(0, -1, 0, 0.5));
 	upCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
-	upCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 50));
+	upCamera->setProjMatrix(matFactory::PerspectiveProjection(45, (float)WinX / WinY, 0.1f, 50));
 
 	downCamera = new Camera(vec4(0, 1, 0, 0.5));
 	downCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
-	downCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 50));
+	downCamera->setProjMatrix(matFactory::PerspectiveProjection(45, (float)WinX / WinY, 0.1f, 50));
 }
 void destroyCameras() {
 	delete(mainCamera);
@@ -200,11 +208,22 @@ void createScene() {
 	wfbos = new WaterFrameBuffers();
 	scene = new SceneGraph(mainCamera, ShaderManager::Instance()->GetShader("waterShader"));
 
-	SceneNode *root, *cube, *cube2, *cube3;
+	SceneNode *root, *cube, *cube2, *cube3, *skybox;
+	Texture * skyboxTexture;
 
 	root = new SceneNode();
 	root->setMatrix(matFactory::Identity4());
 	scene->setRoot(root);
+	skybox = new SkyboxSceneNode();
+	skybox->setMatrix(matFactory::Scale3(100, 100, 100));
+	vector<const GLchar*> faces = { "Box_Left.bmp" , "Box_Right.bmp" ,"Box_Top.bmp" , "Box_Bottom.bmp" , "Box_Back.bmp" ,"Box_Front.bmp" };
+
+	skyboxTexture = new SkyboxTexture(faces);
+	skybox->setTexture(skyboxTexture);
+	skybox->setShader(ShaderManager::Instance()->GetShader("skyboxShader"));
+	skybox->setMesh(MeshManager::Instance()->GetMesh("quad"));
+	skybox->setColor(vec3(1, 0, 0));
+	root->addNode(skybox);
 
 	cube = new SceneNode();
 	cube->setMatrix(matFactory::Scale3(2, 2, 2) * matFactory::Translate3(2,2,-2));
@@ -229,6 +248,9 @@ void createScene() {
 	cube3->setMesh(MeshManager::Instance()->GetMesh("cube"));
 	cube3->setTexture(TextureManager::Instance()->GetTexture("cat"));
 	root->addNode(cube3);
+
+	
+
 
 	water = new WaterSceneNode();
 	water->setMatrix(matFactory::Scale3(10, 0, 10));

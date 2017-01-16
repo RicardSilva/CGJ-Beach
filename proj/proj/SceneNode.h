@@ -15,7 +15,6 @@ namespace engine {
 		vec3 color;
 		Shader *shader;
 		Texture *texture;
-		Texture *skyboxTexture;
 		vector<SceneNode*> nodes;
 
 		GLint  skyboxID;
@@ -35,32 +34,9 @@ namespace engine {
 
 		void setColor(vec3& v) { color = v; }
 		void setTexture(Texture* t) { texture = t; }
-		void setSkybox(Texture* st) { skyboxTexture = st; }
 
 		virtual void setShader(Shader* s) { shader = s; }
-		/*void setShaderSkybox(Shader* s) {
-			shader = s;
-			viewId = s->GetUniformLocation("ViewMatrix");
-			projID = s->GetUniformLocation("ProjectionMatrix");
-			modelID = s->GetUniformLocation("ModelMatrix");
-			colorID = s->GetUniformLocation("Color");
-			textureID = s->GetUniformLocation("Texture");
-			skyboxID = s->GetUniformLocation("skybox");
-			shader->Use();
-			glUniform3fv(colorID, 1, color.Export());
-			if (texture != nullptr) {
-				texture->Use();
-				glUniform1i(textureID, 0);
-				texture->UnUse();
-			}
-			if (skyboxTexture != nullptr) {
-				skyboxTexture->Use();
-				glUniform1i(skyboxID, 0);
-				skyboxTexture->UnUse();
-			}
-			shader->UnUse();
-		}
-*/
+		
 		Shader *getShader() { return shader; }
 
 
@@ -82,15 +58,7 @@ namespace engine {
 					glActiveTexture(GL_TEXTURE0);
 					texture->Use();
 				}
-				if (skyboxTexture != nullptr) {
-					glCullFace(GL_FRONT);
-					skyboxTexture->Use();
-				}
 				mesh->draw();
-				if (skyboxTexture != nullptr) {
-					skyboxTexture->UnUse();
-					glCullFace(GL_BACK);
-				}
 				if (texture != nullptr)
 					texture->UnUse();
 				
