@@ -10,6 +10,9 @@
 #include "GL/glew.h"
 #include "GL/freeglut.h"
 
+#include <chrono>
+
+
 
 #define CAPTION "Loading World"
 using namespace engine;
@@ -187,15 +190,15 @@ void destroyMeshes() {
 void createCameras() {
 	mainCamera = new Camera(vec4());
 	mainCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
-	mainCamera->setProjMatrix(matFactory::PerspectiveProjection(45, (float)WinX / WinY, 0.1f, 50));
+	mainCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 50));
 
 	upCamera = new Camera(vec4(0, -1, 0, 0.5));
 	upCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
-	upCamera->setProjMatrix(matFactory::PerspectiveProjection(45, (float)WinX / WinY, 0.1f, 50));
+	upCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 50));
 
 	downCamera = new Camera(vec4(0, 1, 0, 0.5));
 	downCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
-	downCamera->setProjMatrix(matFactory::PerspectiveProjection(45, (float)WinX / WinY, 0.1f, 50));
+	downCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 50));
 }
 void destroyCameras() {
 	delete(mainCamera);
@@ -348,14 +351,39 @@ void timer(int value)
 	glutTimerFunc(1000, timer, 0);
 }
 
+void screenshot(const std::string& filename, int x, int y)
+{// get the image data
+	long imageSize = x * y * 3;
+	unsigned char *data = new unsigned char[imageSize];
+	glReadPixels(0, 0, x, y, GL_BGR, GL_UNSIGNED_BYTE, data);// split x and y sizes into bytes
+	int xa = x % 256;
+	int xb = (x - xa) / 256; int ya = y % 256;
+	int yb = (y - ya) / 256;//assemble the header
+	unsigned char header[18] = { 0,0,2,0,0,0,0,0,0,0,0,0,(char)xa,(char)xb,(char)ya,(char)yb,24,0 };
+	// write header and data to file
+	fstream File(filename, ios::out | ios::binary);
+	File.write(reinterpret_cast<char *>(header), sizeof(char) * 18);
+	File.write(reinterpret_cast<char *>(data), sizeof(char)*imageSize);
+	File.close();
+
+	delete[] data;
+	data = NULL;
+}
 void myKeydown(unsigned char key, int x, int y) {
 	key = tolower(key);
 	switch (key) {
-	case('g') :
+	case('p') :
+		unsigned long milliseconds_since_epoch =
+		std::chrono::duration_cast<std::chrono::milliseconds>
+		(std::chrono::system_clock::now().time_since_epoch()).count();
+		std::cout << milliseconds_since_epoch << std::endl;
+		screenshot(std::string("../../printscreens/") + std::to_string(milliseconds_since_epoch) + std::string(".tga"), WinX, WinY);
 		
 		break;
 	}
 }
+
+
 
 //void mouseWheel(int button, int dir, int x, int y)
 //{
