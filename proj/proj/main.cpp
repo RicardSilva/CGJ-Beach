@@ -10,6 +10,9 @@
 #include "GL/glew.h"
 #include "GL/freeglut.h"
 
+#include <chrono>
+
+
 
 #define CAPTION "Loading World"
 using namespace engine;
@@ -139,6 +142,10 @@ void createShaders()
 	Shader *sandShader = new CubeShader("VerticeShaderSand.glsl", "FragmentShaderSand.glsl");
 	ShaderManager::Instance()->AddShader("sandShader", sandShader);
 
+	//skybox shader
+	Shader *skyboxShader = new SkyboxShader("SkyboxVerticeShader.glsl", "SkyboxFragmentShader.glsl");
+	ShaderManager::Instance()->AddShader("skyboxShader", skyboxShader);
+
 	checkOpenGLError("ERROR: Could not create shaders.");
 }
 void destroyShaders()
@@ -156,12 +163,12 @@ void createTextures() {
 	TextureManager::Instance()->AddTexture("sand", sandTexture);
 
 	vector<const GLchar*> faces;
-	faces.push_back("right.jpg");
-	faces.push_back("left.jpg");
-	faces.push_back("top.jpg");
-	faces.push_back("bottom.jpg");
-	faces.push_back("back.jpg");
-	faces.push_back("front.jpg");
+	faces.push_back("Box_Right.bmp");
+	faces.push_back("Box_Left.bmp");
+	faces.push_back("Box_Top.bmp");
+	faces.push_back("Box_Bottom.bmp");
+	faces.push_back("Box_Back.bmp");
+	faces.push_back("Box_Front.bmp");
 
 	Texture *skyboxTexture = new SkyboxTexture(faces);
 	TextureManager::Instance()->AddTexture("skybox", skyboxTexture);
@@ -177,13 +184,19 @@ void destroyTextures()
 void createMeshes() {
 	Mesh* cubeMesh = new Mesh(std::string("cube.obj"));
 	MeshManager::Instance()->AddMesh("cube", cubeMesh);
+
 	Mesh* sandMesh = new Mesh();
 	MeshManager::Instance()->AddMesh("sand", sandMesh);
+
+	Mesh* quadMesh = new Mesh(std::string("quad.obj"));
+	MeshManager::Instance()->AddMesh("quad", quadMesh);
+
 	checkOpenGLError("ERROR: Could not create meshes.");
 }
 void destroyMeshes() {
 	MeshManager::Instance()->Destroy();
 }
+
 void createCameras() {
 	mainCamera = new Camera(vec4());
 	mainCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
@@ -208,11 +221,22 @@ void createScene() {
 	wfbos = new WaterFrameBuffers();
 	scene = new SceneGraph(mainCamera, ShaderManager::Instance()->GetShader("waterShader"));
 
-	SceneNode *root, *cube, *cube2, *cube3;
+	SceneNode *root, *cube, *cube2, *cube3, *skybox;
+	Texture * skyboxTexture;
 
 	root = new SceneNode();
 	root->setMatrix(matFactory::Identity4());
 	scene->setRoot(root);
+	skybox = new SkyboxSceneNode();
+	skybox->setMatrix(matFactory::Scale3(100, 100, 100));
+	vector<const GLchar*> faces = { "Box_Left.bmp" , "Box_Right.bmp" ,"Box_Top.bmp" , "Box_Bottom.bmp" , "Box_Back.bmp" ,"Box_Front.bmp" };
+
+	skyboxTexture = new SkyboxTexture(faces);
+	skybox->setTexture(skyboxTexture);
+	skybox->setShader(ShaderManager::Instance()->GetShader("skyboxShader"));
+	skybox->setMesh(MeshManager::Instance()->GetMesh("quad"));
+	skybox->setColor(vec3(1, 0, 0));
+	root->addNode(skybox);
 
 	cube = new SceneNode();
 	cube->setMatrix(matFactory::Scale3(2, 2, 2) * matFactory::Translate3(2,2,-2));
@@ -334,15 +358,46 @@ void timer(int value)
 	glutTimerFunc(1000, timer, 0);
 }
 
-void myKeydown(unsigned char key, int x, int y) {
-	key = tolower(key);
-	switch (key) {
-	case('g') :
-		
-		break;
-	}
+void screenshotTGA(const std::string& filename)
+{
+	int x = glutGet(GLUT_WINDOW_WIDTH);
+	int y = glutGet(GLUT_WINDOW_HEIGHT);
+	// get the image data
+	long imageSize = x * y * 3;
+	unsigned char *data = new unsigned char[imageSize];
+	glReadPixels(0, 0, x, y, GL_BGR, GL_UNSIGNED_BYTE, data);// split x and y sizes into bytes
+	int xa = x % 256;
+	int xb = (x - xa) / 256; int ya = y % 256;
+	int yb = (y - ya) / 256;//assemble the header
+	unsigned char header[18] = { 0,0,2,0,0,0,0,0,0,0,0,0,(char)xa,(char)xb,(char)ya,(char)yb,24,0 };
+	// write header and data to file
+	fstream File(filename, ios::out | ios::binary);
+	File.write(reinterpret_cast<char *>(header), sizeof(char) * 18);
+	File.write(reinterpret_cast<char *>(data), sizeof(char)*imageSize);
+	File.close();
+
+	delete[] data;
+	data = NULL;
+}
+void screenshotBMP(const std::string& filename) {
+	int w = glutGet(GLUT_WINDOW_WIDTH);
+	int h = glutGet(GLUT_WINDOW_HEIGHT);
+	SOIL_save_screenshot(filename.c_str(), SOIL_SAVE_TYPE_BMP,0,0, w, h);
 }
 
+void myKeydown(unsigned char key, int x, int y) {
+	key = tolower(key);
+	if (key == 'b') {
+		unsigned long milliseconds_since_epoch =
+			std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+		screenshotBMP(std::string("../../printscreens/") + std::to_string(milliseconds_since_epoch) + std::string(".bmp"));
+	}
+	else if (key == 't') {
+		unsigned long milliseconds_since_epoch =
+			std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+		screenshotTGA(std::string("../../printscreens/") + std::to_string(milliseconds_since_epoch) + std::string(".tga"));
+	}
+}
 //void mouseWheel(int button, int dir, int x, int y)
 //{
 //	if (dir > 0) {
