@@ -6,16 +6,12 @@ in vec3 exNormal;
 
 out vec4 FragmentColor;
 
-uniform vec3 Color;
 uniform sampler2D Texture;
-uniform sampler2D Texture2;
-uniform float time;
-
 uniform vec3 Ks;
 uniform vec3 Kd;
 uniform float Ns;
-
 uniform mat4 ModelMatrix;
+
 uniform SharedMatrices
 {
 	mat4 ViewMatrix;
@@ -45,13 +41,13 @@ void main(void)
 
     //diffuse
     float diffuseCoefficient = max(0.0, dot(exNormal, surfaceToLight));
-    vec3 diffuse = diffuseCoefficient * 0.4 * surfaceColor.rgb  * intensities;
+    vec3 diffuse = diffuseCoefficient * Kd * surfaceColor.rgb  * intensities;
 
     //specular
     float specularCoefficient = 0.0;
     if(diffuseCoefficient > 0.0)
-        specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, exNormal))), 0.9);
-    vec3 specular = specularCoefficient * 0.4 * surfaceColor.rgb  * intensities;
+        specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, exNormal))), Ns);
+    vec3 specular = specularCoefficient * Ks * surfaceColor.rgb  * intensities;
 
     //attenuation
     float distanceToLight = length(lightPosition - exPosition);

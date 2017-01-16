@@ -16,6 +16,7 @@
 #include "SceneNode.h"
 #include "WaterSceneNode.h"
 #include "SkyboxSceneNode.h"
+#include "SandSceneNode.h"
 #include "SceneGraph.h"
 #include "Texture.h"
 #include "SkyboxTexture.h"
