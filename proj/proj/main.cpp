@@ -50,60 +50,6 @@ struct Light {
 	float attenuation;
 	float ambientCoefficient; 
 };
-///// MATERIAL PARSING
-
-void extractMTLdata(string fp, string* materials, float diffuses[][3], float speculars[][3])
-{
-	// Counters
-	int m = 0;
-	int d = 0;
-	int s = 0;
-
-	// Open MTL file
-	ifstream inMTL;
-	inMTL.open(fp);
-	if (!inMTL.good())
-	{
-		cout << "ERROR OPENING MTL FILE" << endl;
-		exit(1);
-	}
-
-	// Read MTL file
-	while (!inMTL.eof())
-	{
-		string line;
-		getline(inMTL, line);
-		string type = line.substr(0, 2);
-
-		// Names
-		if (type.compare("ne") == 0)
-		{
-			// 1
-			// Extract token
-			string l = "newmtl ";
-			materials[m] = line.substr(l.size());
-			m++;
-		}
-
-		// 2
-		// Diffuses
-		else if (type.compare("Kd") == 0)
-		{
-			// Implementation challenge!
-		}
-
-		// 3
-		// Speculars
-		else if (type.compare("Ks") == 0)
-		{
-			// Implementation challenge!
-		}
-	}
-
-	// Close MTL file
-	inMTL.close();
-}
-
 
 /////////////////////////////////////////////////////////////////////// ERRORS
 
@@ -185,8 +131,11 @@ void createMeshes() {
 	Mesh* cubeMesh = new Mesh(std::string("cube.obj"));
 	MeshManager::Instance()->AddMesh("cube", cubeMesh);
 
-	Mesh* sandMesh = new Mesh();
+	Mesh* sandMesh = new Mesh(false);
 	MeshManager::Instance()->AddMesh("sand", sandMesh);
+
+	Mesh* sandMeshFlat = new Mesh(true);
+	MeshManager::Instance()->AddMesh("sandFlat", sandMeshFlat);
 
 	Mesh* quadMesh = new Mesh(std::string("quad.obj"));
 	MeshManager::Instance()->AddMesh("quad", quadMesh);
@@ -235,7 +184,7 @@ void createScene() {
 	wfbos = new WaterFrameBuffers();
 	scene = new SceneGraph(mainCamera, ShaderManager::Instance()->GetShader("waterShader"));
 
-	SceneNode *root, *cube, *cube2, *cube3, *skybox;
+	SceneNode *root, *cube, *cube2, *cube3, *cube4, *skybox;
 	Texture * skyboxTexture;
 
 	root = new SceneNode();
@@ -270,12 +219,19 @@ void createScene() {
 
 	cube3 = new SandSceneNode();
 	cube3->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(-50, -2, -50));
-	cube3->setColor(vec3(0, 0, 1));
 	cube3->setShader(ShaderManager::Instance()->GetShader("sandShader"));
 	cube3->setMesh(MeshManager::Instance()->GetMesh("sand"));
 	cube3->setMaterial(MaterialManager::Instance()->GetMaterial("sand"));
 	cube3->setTexture(TextureManager::Instance()->GetTexture("sand"));
 	root->addNode(cube3);
+
+	cube4 = new SandSceneNode();
+	cube4->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(-50, -2, -50));
+	cube4->setShader(ShaderManager::Instance()->GetShader("sandShader"));
+	cube4->setMesh(MeshManager::Instance()->GetMesh("sandFlat"));
+	cube4->setMaterial(MaterialManager::Instance()->GetMaterial("sand"));
+	cube4->setTexture(TextureManager::Instance()->GetTexture("sand"));
+	root->addNode(cube4);
 
 	water = new WaterSceneNode();
 	water->setMatrix(matFactory::Scale3(10, 0, 10));
