@@ -16,7 +16,7 @@ uniform SharedMatrices
 {
 	mat4 ViewMatrix;
 	mat4 ProjectionMatrix;
-	vec4 ClippingPane;
+	vec4 ClipingPlane;
 	vec3 lightPosition;
     vec3 intensities; //a.k.a the color of the light
     float attenuation; 

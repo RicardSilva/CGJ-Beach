@@ -37,7 +37,7 @@ mat4 rotation, inverseRotation;
 qtrn quat = qtrn::qFromAngleAxis(0, vec4(0, 0, 1, 0));
 
 SceneGraph* scene;
-SceneNode* water;
+SceneNode* water, *sand;
 WaterFrameBuffers* wfbos;
 Camera *mainCamera, *upCamera, *downCamera;
 
@@ -163,15 +163,15 @@ void destroyMaterials() {
 void createCameras() {
 	mainCamera = new Camera(vec4());
 	mainCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
-	mainCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 50));
+	mainCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 20));
 
 	upCamera = new Camera(vec4(0, -1, 0, 0.5));
 	upCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
-	upCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 50));
+	upCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 20));
 
 	downCamera = new Camera(vec4(0, 1, 0, 0.5));
 	downCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
-	downCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 50));
+	downCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 20));
 }
 void destroyCameras() {
 	delete(mainCamera);
@@ -184,7 +184,8 @@ void createScene() {
 	wfbos = new WaterFrameBuffers();
 	scene = new SceneGraph(mainCamera, ShaderManager::Instance()->GetShader("waterShader"));
 
-	SceneNode *root, *cube, *cube2, *cube3, *cube4, *skybox;
+	SceneNode *root, *cube, *cube2, *sandFlat, *skybox;
+
 	Texture * skyboxTexture;
 
 	root = new SceneNode();
@@ -199,7 +200,7 @@ void createScene() {
 	skybox->setShader(ShaderManager::Instance()->GetShader("skyboxShader"));
 	skybox->setMesh(MeshManager::Instance()->GetMesh("quad"));
 	skybox->setColor(vec3(1, 0, 0));
-	root->addNode(skybox);
+	//root->addNode(skybox);
 
 	cube = new SceneNode();
 	cube->setMatrix(matFactory::Scale3(2, 2, 2) * matFactory::Translate3(2,2,-2));
@@ -217,21 +218,22 @@ void createScene() {
 	cube2->setTexture(TextureManager::Instance()->GetTexture("cat"));
 	root->addNode(cube2);
 
-	cube3 = new SandSceneNode();
-	cube3->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(-50, -2, -50));
-	cube3->setShader(ShaderManager::Instance()->GetShader("sandShader"));
-	cube3->setMesh(MeshManager::Instance()->GetMesh("sand"));
-	cube3->setMaterial(MaterialManager::Instance()->GetMaterial("sand"));
-	cube3->setTexture(TextureManager::Instance()->GetTexture("sand"));
-	root->addNode(cube3);
 
-	cube4 = new SandSceneNode();
-	cube4->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(-50, -2, -50));
-	cube4->setShader(ShaderManager::Instance()->GetShader("sandShader"));
-	cube4->setMesh(MeshManager::Instance()->GetMesh("sandFlat"));
-	cube4->setMaterial(MaterialManager::Instance()->GetMaterial("sand"));
-	cube4->setTexture(TextureManager::Instance()->GetTexture("sand"));
-	root->addNode(cube4);
+	sand = new SandSceneNode();
+	sand->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(-50, -2, -50));
+	sand->setShader(ShaderManager::Instance()->GetShader("sandShader"));
+	sand->setMesh(MeshManager::Instance()->GetMesh("sand"));
+	sand->setMaterial(MaterialManager::Instance()->GetMaterial("sand"));
+	sand->setTexture(TextureManager::Instance()->GetTexture("sand"));
+	root->addNode(sand);
+
+	sandFlat = new SandSceneNode();
+	sandFlat->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(-50, -2, -50));
+	sandFlat->setShader(ShaderManager::Instance()->GetShader("sandShader"));
+	sandFlat->setMesh(MeshManager::Instance()->GetMesh("sandFlat"));
+	sandFlat->setMaterial(MaterialManager::Instance()->GetMaterial("sand"));
+	sandFlat->setTexture(TextureManager::Instance()->GetTexture("sand"));
+	root->addNode(sandFlat);
 
 	water = new WaterSceneNode();
 	water->setMatrix(matFactory::Scale3(10, 0, 10));
@@ -270,6 +272,7 @@ void drawScene()
 
 	//render water
 	water->draw(matFactory::Identity4());
+	sand->draw(matFactory::Identity4());
 
 	checkOpenGLError("ERROR: Could not draw scene.");
 }
@@ -289,7 +292,6 @@ void cleanup()
 void display()
 {
 	++FrameCount;
-	
 	wfbos->bindReflectionFrameBuffer();
 	//glClearColor(0.0f, 0.8f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

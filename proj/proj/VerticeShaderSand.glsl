@@ -17,11 +17,11 @@ uniform SharedMatrices
 {
 	mat4 ViewMatrix;
 	mat4 ProjectionMatrix;
-	vec4 ClippingPane;
+	vec4 ClipingPlane;
 	vec3 lightPosition;
-    vec3 intensities; //a.k.a the color of the light
-    float attenuation; 
-    float ambientCoefficient; 
+	vec3 intensities; //a.k.a the color of the light
+	float attenuation; 
+	float ambientCoefficient; 
 };
 
 vec4 mod289(vec4 x)
@@ -89,10 +89,16 @@ float rand(vec2 c){
 
 void main(void)
 {
+
+	vec4 WorldPosition = ModelMatrix *vec4(inPosition.x,inPosition.y,inPosition.z, 1.0);
+	gl_ClipDistance[0] = dot(WorldPosition, ClipingPlane);
+	
 	exPosition = inPosition;
 	exTexcoord = inTexcoord;
 	exNormal = inNormal;
 
-	vec4 MCPosition = vec4(inPosition.x,inPosition.y,inPosition.z, 1.0);
-	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * MCPosition;
+	
+	
+	//vec4 MCPosition = vec4(inPosition.x,inPosition.y,inPosition.z, 1.0);
+	gl_Position = ProjectionMatrix * ViewMatrix * WorldPosition;
 }

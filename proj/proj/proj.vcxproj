@@ -21,6 +21,8 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CubeShader.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="MeshGenerator.h" />
     <ClInclude Include="SkyboxSceneNode.h" />
     <ClInclude Include="SkyboxShader.h" />
@@ -46,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="MaterialManager.cpp" />
     <ClCompile Include="MeshManager.cpp" />
     <ClCompile Include="OrthogonalCamera.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
@@ -91,7 +94,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
