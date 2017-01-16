@@ -202,9 +202,6 @@ void createMaterials() {
 	Material* cubeMaterial = new Material(std::string("cube.mtl"));
 	MaterialManager::Instance()->AddMaterial("cube", cubeMaterial);
 	checkOpenGLError("ERROR: Could not create meshes.");
-	Material* palmMaterial = new Material(std::string("Palmera.mtl"));
-	MaterialManager::Instance()->AddMaterial("palm", palmMaterial);
-	checkOpenGLError("ERROR: Could not create meshes.");
 	Material* sandMaterial = new Material(std::string("sand.mtl"));
 	MaterialManager::Instance()->AddMaterial("sand", sandMaterial);
 	checkOpenGLError("ERROR: Could not create materials.");
@@ -260,7 +257,6 @@ void createScene() {
 	cube->setColor(vec3(1, 0, 0));
 	cube->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	cube->setMesh(MeshManager::Instance()->GetMesh("cube"));
-	cube->setMaterial(MaterialManager::Instance()->GetMaterial("cube"));
 	cube->setTexture(TextureManager::Instance()->GetTexture("dog"));
 	root->addNode(cube);
 
@@ -269,7 +265,6 @@ void createScene() {
 	cube2->setColor(vec3(0, 1, 0));
 	cube2->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	cube2->setMesh(MeshManager::Instance()->GetMesh("cube"));
-	cube2->setMaterial(MaterialManager::Instance()->GetMaterial("cube"));
 	cube2->setTexture(TextureManager::Instance()->GetTexture("cat"));
 	root->addNode(cube2);
 
@@ -281,6 +276,7 @@ void createScene() {
 	sand->setMaterial(MaterialManager::Instance()->GetMaterial("sand"));
 	sand->setTexture(TextureManager::Instance()->GetTexture("sand"));
 	//root->addNode(sand);
+
 
 	water = new WaterSceneNode();
 	water->setMatrix(matFactory::Scale3(10, 0, 10));
@@ -585,6 +581,7 @@ void init(int argc, char* argv[])
 
 	createShaders();
 	createMeshes();
+	createMaterials();
 	createTextures();
 	createCameras();
 	createScene();
