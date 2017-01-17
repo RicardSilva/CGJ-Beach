@@ -26,7 +26,8 @@ float CameraDistance = 20;
 
 int oldX, oldY;
 bool rotated = false;
-int param = 0;
+float param = 0.0f;
+float variableHeight;
 
 bool mouseLeftDown;
 bool mouseRightDown;
@@ -217,7 +218,7 @@ void createScene() {
 	root->addNode(skybox);
 
 	cube = new SceneNode();
-	cube->setMatrix(matFactory::Scale3(2, 2, 2) * matFactory::Translate3(2,2,-2));
+	cube->setMatrix(matFactory::Scale3(2, 2, 2) * matFactory::Translate3(2,0,-2));
 	cube->setColor(vec3(1, 0, 0));
 	cube->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	cube->setMesh(MeshManager::Instance()->GetMesh("cube"));
@@ -368,9 +369,18 @@ void reshape(int w, int h)
 	glViewport(0, 0, WinX, WinY);
 }
 void update() {
-	water->setMatrix(matFactory::Scale3(10, 0.01, 10) *matFactory::Translate3(0, sin (param*PI/180)*10, 0));
-	param++;
-	if (param > 360) param -= 360;
+	variableHeight = sin(param*PI / 180) * 0.25f;
+
+	water->setMatrix(matFactory::Translate3(0, variableHeight, 0) *matFactory::Scale3(10, 0.01, 10));
+
+	upCamera->setClippingPlane(vec4(0, -1, 0, variableHeight));
+	downCamera->setClippingPlane(vec4(0, 1, 0, -variableHeight));
+
+	upCamera->setViewMatrix(matFactory::Translate3(0, variableHeight, -CameraDistance) * rotation);
+	downCamera->setViewMatrix(matFactory::Translate3(0, -variableHeight, -CameraDistance) * inverseRotation);
+
+	param+=0.5;
+	if (param > 360.0f) param -= 360.0f;
 
 }
 void timer(int value)
@@ -517,8 +527,8 @@ void OnMouseMove(int x, int y) {
 		
 		//scene->getCamera()->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance) * rotation);
 		mainCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance) * rotation);
-		upCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance) * rotation);
-		downCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance) * inverseRotation);
+		upCamera->setViewMatrix(matFactory::Translate3(0, variableHeight, -CameraDistance) * rotation);
+		downCamera->setViewMatrix(matFactory::Translate3(0, variableHeight, -CameraDistance) * inverseRotation);
 	}
 }
 
