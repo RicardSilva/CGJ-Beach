@@ -1,4 +1,3 @@
-*.obj
 *.pdb
 proj/proj/bin/x64/Release/
 proj/proj/obj/x64/Debug/
