@@ -54,6 +54,9 @@ namespace engine {
 			if (mesh != nullptr) {
 				shader->Use();
 				shader->LoadModelMatrix(modelMatrix * matrix);
+				glEnable(GL_BLEND);
+				glDepthMask(GL_FALSE);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				shader->LoadColor(color);
 				if (texture != nullptr){
 
@@ -66,7 +69,8 @@ namespace engine {
 					texture->UnUse();
 				
 				shader->UnUse();
-
+				glDisable(GL_BLEND);
+				glDepthMask(GL_TRUE);
 			}
 
 

@@ -39,7 +39,7 @@ mat4 rotation, inverseRotation;
 qtrn quat = qtrn::qFromAngleAxis(0, vec4(0, 0, 1, 0));
 
 SceneGraph* scene;
-SceneNode* water, *sand;
+SceneNode* water, *sand, *tree, *leafs, *tree2, *leafs2, *shrub, *shrubLeafs;
 WaterFrameBuffers* wfbos;
 Camera *mainCamera, *upCamera, *downCamera;
 
@@ -117,6 +117,11 @@ void createTextures() {
 	Texture *sandTexture = new Texture("sand2.jpg");
 	TextureManager::Instance()->AddTexture("sand", sandTexture);
 
+	Texture *trunkTexture = new Texture("palm_bark.png");
+	TextureManager::Instance()->AddTexture("trunk", trunkTexture);
+	Texture *leafsTexture = new Texture("palm_leafs.png");
+	TextureManager::Instance()->AddTexture("leafs", leafsTexture);
+
 
 	vector<const GLchar*> faces;
 	faces.push_back("Box_Right.bmp");
@@ -153,6 +158,16 @@ void createMeshes() {
 	Mesh* quadMesh = new Mesh(std::string("quad.obj"));
 	MeshManager::Instance()->AddMesh("quad", quadMesh);
 
+	Mesh* treeMesh = new Mesh(std::string("palmTrunk.obj"));
+	MeshManager::Instance()->AddMesh("tree", treeMesh);
+	Mesh* leafsMesh = new Mesh(std::string("palmLeafs.obj"));
+	MeshManager::Instance()->AddMesh("leafs", leafsMesh);
+
+	Mesh* shrubMesh = new Mesh(std::string("shrubTrunk.obj"));
+	MeshManager::Instance()->AddMesh("shrub", shrubMesh);
+	Mesh* shrubLeafsMesh = new Mesh(std::string("shrubLeafs.obj"));
+	MeshManager::Instance()->AddMesh("shrubLeafs", shrubLeafsMesh);
+
 	checkOpenGLError("ERROR: Could not create meshes.");
 }
 
@@ -171,7 +186,6 @@ void createMaterials() {
 	MaterialManager::Instance()->AddMaterial("sand", sandMaterial);
 	checkOpenGLError("ERROR: Could not create materials.");
 }
-
 void destroyMaterials() {
 	MaterialManager::Instance()->Destroy();
 }
@@ -204,9 +218,16 @@ void createScene() {
 
 	Texture * skyboxTexture;
 
+	
+
+
+
 	root = new SceneNode();
 	root->setMatrix(matFactory::Identity4());
 	scene->setRoot(root);
+
+	
+
 	skybox = new SkyboxSceneNode();
 	skybox->setMatrix(matFactory::Scale3(100, 100, 100));
 	vector<const GLchar*> faces = { "Box_Left.bmp" , "Box_Right.bmp" ,"Box_Top.bmp" , "Box_Bottom.bmp" , "Box_Back.bmp" ,"Box_Front.bmp" };
@@ -218,21 +239,7 @@ void createScene() {
 	skybox->setColor(vec3(1, 0, 0));
 	root->addNode(skybox);
 
-	/*cube = new SceneNode();
-	cube->setMatrix(matFactory::Scale3(2, 2, 2) * matFactory::Translate3(2,0,-2));
-	cube->setColor(vec3(1, 0, 0));
-	cube->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
-	cube->setMesh(MeshManager::Instance()->GetMesh("cube"));
-	cube->setTexture(TextureManager::Instance()->GetTexture("dog"));
-	root->addNode(cube);
-
-	cube2 = new SceneNode();
-	cube2->setMatrix(matFactory::Scale3(2, 2, 2) *matFactory::Translate3(-2, 0, -2));
-	cube2->setColor(vec3(0, 1, 0));
-	cube2->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
-	cube2->setMesh(MeshManager::Instance()->GetMesh("cube"));
-	cube2->setTexture(TextureManager::Instance()->GetTexture("cat"));
-	root->addNode(cube2);*/
+	
 
 	rock = new SceneNode();
 	rock->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(2, 0, 40));
@@ -287,6 +294,48 @@ void createScene() {
 	sandFlat->setTexture(TextureManager::Instance()->GetTexture("sand"));
 	root->addNode(sandFlat);
 
+	tree = new SceneNode();
+	tree->setMatrix(matFactory::Translate3(3, 0.5, -2) * matFactory::Scale3(0.05f, 0.05f, 0.05f));
+	tree->setMesh(MeshManager::Instance()->GetMesh("tree"));
+	tree->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
+	tree->setTexture(TextureManager::Instance()->GetTexture("trunk"));
+	root->addNode(tree);
+
+	leafs = new SceneNode();
+	leafs->setMatrix(matFactory::Translate3(3, 0.5, -2) * matFactory::Scale3(0.05f, 0.05f, 0.05f));
+	leafs->setMesh(MeshManager::Instance()->GetMesh("leafs"));
+	leafs->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
+	leafs->setTexture(TextureManager::Instance()->GetTexture("leafs"));
+	root->addNode(leafs);
+
+	tree2 = new SceneNode();
+	tree2->setMatrix(matFactory::Translate3(2, 0.5, 1) * matFactory::Scale3(0.04f, 0.04f, 0.04f));
+	tree2->setMesh(MeshManager::Instance()->GetMesh("tree"));
+	tree2->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
+	tree2->setTexture(TextureManager::Instance()->GetTexture("trunk"));
+	root->addNode(tree2);
+
+	leafs2 = new SceneNode();
+	leafs2->setMatrix(matFactory::Translate3(2, 0.5, 1) * matFactory::Scale3(0.04f, 0.04f, 0.04f));
+	leafs2->setMesh(MeshManager::Instance()->GetMesh("leafs"));
+	leafs2->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
+	leafs2->setTexture(TextureManager::Instance()->GetTexture("leafs"));
+	root->addNode(leafs2);
+
+	shrub = new SceneNode();
+	shrub->setMatrix(matFactory::Translate3(1, 0.25, 2) * matFactory::Scale3(0.04f, 0.04f, 0.04f));
+	shrub->setMesh(MeshManager::Instance()->GetMesh("shrub"));
+	shrub->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
+	shrub->setTexture(TextureManager::Instance()->GetTexture("trunk"));
+	root->addNode(shrub);
+
+	shrubLeafs = new SceneNode();
+	shrubLeafs->setMatrix(matFactory::Translate3(1, 0.25, 2) * matFactory::Scale3(0.04f, 0.04f, 0.04f));
+	shrubLeafs->setMesh(MeshManager::Instance()->GetMesh("shrubLeafs"));
+	shrubLeafs->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
+	shrubLeafs->setColor(vec3(1.0f, 0.0f, 0.0f));
+	shrubLeafs->setTexture(TextureManager::Instance()->GetTexture("leafs"));
+	root->addNode(shrubLeafs);
 
 	water = new WaterSceneNode();
 	water->setMatrix(matFactory::Scale3(10, 0.1, 20));
@@ -326,6 +375,12 @@ void drawScene()
 
 	//render water
 	water->draw(matFactory::Identity4());
+	tree->draw(matFactory::Identity4());
+	leafs->draw(matFactory::Identity4());
+	tree2->draw(matFactory::Identity4());
+	leafs2->draw(matFactory::Identity4());
+	shrub->draw(matFactory::Identity4());
+	shrubLeafs->draw(matFactory::Identity4());
 
 	checkOpenGLError("ERROR: Could not draw scene.");
 }
