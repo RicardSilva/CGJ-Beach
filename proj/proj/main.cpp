@@ -87,6 +87,9 @@ void createShaders()
 	//sandShader
 	Shader *sandShader = new CubeShader("VerticeShaderSand.glsl", "FragmentShaderSand.glsl");
 	ShaderManager::Instance()->AddShader("sandShader", sandShader);
+	//flatSandShader
+	Shader *flatSandShader = new CubeShader("VerticeShaderSand.glsl", "FragmentShaderFlatSand.glsl");
+	ShaderManager::Instance()->AddShader("flatSandShader", flatSandShader);
 
 	//rockShader
 	Shader *rockShader = new CubeShader("RockVerticeShader.glsl", "RockFragmentShader.glsl");
@@ -210,7 +213,7 @@ void createScene() {
 	skybox->setShader(ShaderManager::Instance()->GetShader("skyboxShader"));
 	skybox->setMesh(MeshManager::Instance()->GetMesh("quad"));
 	skybox->setColor(vec3(1, 0, 0));
-	//root->addNode(skybox);
+	root->addNode(skybox);
 
 	cube = new SceneNode();
 	cube->setMatrix(matFactory::Scale3(2, 2, 2) * matFactory::Translate3(2,2,-2));
@@ -258,14 +261,11 @@ void createScene() {
 	rock33->setMesh(MeshManager::Instance()->GetMesh("rock"));
 	root->addNode(rock33);
 
-
-
 	rock4 = new SceneNode();
 	rock4->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(18, 5, 23));
 	rock4->setShader(ShaderManager::Instance()->GetShader("rockShader"));
 	rock4->setMesh(MeshManager::Instance()->GetMesh("rock"));
 	root->addNode(rock4);
-
 
 	sand = new SandSceneNode();
 	sand->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(-50, -2, -50));
@@ -275,13 +275,15 @@ void createScene() {
 	sand->setTexture(TextureManager::Instance()->GetTexture("sand"));
 	root->addNode(sand);
 
-	sandFlat = new SandSceneNode();
+
+	sandFlat = new FlatSandSceneNode();
 	sandFlat->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(-50, -2, -50));
-	sandFlat->setShader(ShaderManager::Instance()->GetShader("sandShader"));
+	sandFlat->setShader(ShaderManager::Instance()->GetShader("flatSandShader"));
 	sandFlat->setMesh(MeshManager::Instance()->GetMesh("sandFlat"));
 	sandFlat->setMaterial(MaterialManager::Instance()->GetMaterial("sand"));
 	sandFlat->setTexture(TextureManager::Instance()->GetTexture("sand"));
 	root->addNode(sandFlat);
+
 
 	water = new WaterSceneNode();
 	water->setMatrix(matFactory::Scale3(10, 0, 10));
@@ -320,7 +322,7 @@ void drawScene()
 
 	//render water
 	water->draw(matFactory::Identity4());
-	sand->draw(matFactory::Identity4());
+	//sand->draw(matFactory::Identity4());
 
 	checkOpenGLError("ERROR: Could not draw scene.");
 }

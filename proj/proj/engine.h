@@ -16,6 +16,7 @@
 #include "SceneNode.h"
 #include "WaterSceneNode.h"
 #include "SkyboxSceneNode.h"
+#include "FlatSandSceneNode.h"
 #include "SandSceneNode.h"
 #include "SceneGraph.h"
 #include "Texture.h"
@@ -24,5 +25,6 @@
 #include "WaterFrameBuffers.h"
 #include "Material.h"
 #include "MaterialManager.h"
+
 
 int WinX = 640, WinY = 480;
