@@ -36,7 +36,7 @@ void main(void){
 	
 	vec3 cameraPosition = -ViewMatrix[3].xyz * mat3(ViewMatrix);
 	toCameraVector = cameraPosition - worldCoords.xyz;
-	fromLightVector = worldCoords.xyz - lightPosition;
+	fromLightVector = worldCoords.xyz - vec3(0,5,0);
 	
   exintensities = intensities; 
 	exattenuation = attenuation; 

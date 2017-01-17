@@ -18,10 +18,12 @@ namespace engine {
 		vector<SceneNode*> nodes;
 		Material *material;
 		GLint  skyboxID;
+		bool isTree;
 
 	public:
 
 		SceneNode() {}
+		SceneNode(bool isTree) : isTree(isTree) {}
 		virtual ~SceneNode() {
 			for (auto node : nodes)
 				delete(node);
@@ -54,11 +56,13 @@ namespace engine {
 			if (mesh != nullptr) {
 				shader->Use();
 				shader->LoadModelMatrix(modelMatrix * matrix);
-				glEnable(GL_BLEND);
-				glDepthMask(GL_FALSE);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				if (isTree) {
+					glEnable(GL_BLEND);
+					glDepthMask(GL_FALSE);
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				}
 				shader->LoadColor(color);
-				if (texture != nullptr){
+				if (texture != nullptr) {
 
 					shader->LoadTexture(texture);
 					glActiveTexture(GL_TEXTURE0);
@@ -67,10 +71,12 @@ namespace engine {
 				mesh->draw();
 				if (texture != nullptr)
 					texture->UnUse();
-				
+
 				shader->UnUse();
-				glDisable(GL_BLEND);
-				glDepthMask(GL_TRUE);
+				if (isTree) {
+					glDisable(GL_BLEND);
+					glDepthMask(GL_TRUE);
+				}
 			}
 
 

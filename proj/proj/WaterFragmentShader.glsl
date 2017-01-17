@@ -68,7 +68,7 @@ void main(void){
 	vec3 reflectedLight = reflect(normalize(fromLightVector), normal);
 	float specular = max(dot(reflectedLight, viewVector), 0.0);
 	specular = pow(specular, 20);
-	vec3 specularHighlights = exintensities * 2 * specular * 0.4 * clamp(waterDepth / 20.0, 0.0, 1.0);
+	vec3 specularHighlights = exintensities * 7 * specular * 0.4 * clamp(waterDepth / 20.0, 0.0, 1.0);
 	
 	FragmentColor = mix(reflectColor, refractColor, refractiveFactor);
 	
