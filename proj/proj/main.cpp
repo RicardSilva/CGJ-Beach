@@ -21,7 +21,7 @@ using namespace engine;
 int WindowHandle = 0;
 unsigned int FrameCount = 0;
 
-float CameraDistance = 20;
+float CameraDistance = 10;
 
 
 int oldX, oldY;
@@ -116,6 +116,7 @@ void createTextures() {
 	TextureManager::Instance()->AddTexture("cat", catTexture);
 	Texture *sandTexture = new Texture("sand2.jpg");
 	TextureManager::Instance()->AddTexture("sand", sandTexture);
+
 
 	vector<const GLchar*> faces;
 	faces.push_back("Box_Right.bmp");
@@ -217,7 +218,7 @@ void createScene() {
 	skybox->setColor(vec3(1, 0, 0));
 	root->addNode(skybox);
 
-	cube = new SceneNode();
+	/*cube = new SceneNode();
 	cube->setMatrix(matFactory::Scale3(2, 2, 2) * matFactory::Translate3(2,0,-2));
 	cube->setColor(vec3(1, 0, 0));
 	cube->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
@@ -231,7 +232,7 @@ void createScene() {
 	cube2->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	cube2->setMesh(MeshManager::Instance()->GetMesh("cube"));
 	cube2->setTexture(TextureManager::Instance()->GetTexture("cat"));
-	root->addNode(cube2);
+	root->addNode(cube2);*/
 
 	rock = new SceneNode();
 	rock->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(2, 0, 40));
@@ -288,7 +289,7 @@ void createScene() {
 
 
 	water = new WaterSceneNode();
-	water->setMatrix(matFactory::Scale3(10, 0.1, 10));
+	water->setMatrix(matFactory::Scale3(10, 0.1, 20));
 	water->setColor(vec3(1, 1, 0));
 	water->setShader(ShaderManager::Instance()->GetShader("waterShader"));
 	water->setMesh(MeshManager::Instance()->GetMesh("cube"));
@@ -319,12 +320,12 @@ void drawScene()
 
 	//render to screen
 	wfbos->unbindCurrentFrameBuffer();
+	glViewport(0, 0, WinX, WinY);
 	scene->setCamera(mainCamera);
 	scene->draw();
 
 	//render water
 	water->draw(matFactory::Identity4());
-	//sand->draw(matFactory::Identity4());
 
 	checkOpenGLError("ERROR: Could not draw scene.");
 }
@@ -350,6 +351,7 @@ void display()
 	wfbos->bindRefractionFrameBuffer();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	wfbos->unbindCurrentFrameBuffer();
+	glViewport(0, 0, WinX, WinY);
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -369,12 +371,14 @@ void reshape(int w, int h)
 	glViewport(0, 0, WinX, WinY);
 }
 void update() {
-	variableHeight = sin(param*PI / 180) * 0.25f;
+	variableHeight = ((sin(param*PI / 180)) - 1) / 4;
 
 	water->setMatrix(matFactory::Translate3(0, variableHeight, 0) *matFactory::Scale3(10, 0.01, 10));
 
 	upCamera->setClippingPlane(vec4(0, -1, 0, variableHeight));
 	downCamera->setClippingPlane(vec4(0, 1, 0, -variableHeight));
+
+
 
 	upCamera->setViewMatrix(matFactory::Translate3(0, variableHeight, -CameraDistance) * rotation);
 	downCamera->setViewMatrix(matFactory::Translate3(0, -variableHeight, -CameraDistance) * inverseRotation);

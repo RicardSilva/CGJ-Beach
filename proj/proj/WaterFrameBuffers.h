@@ -5,8 +5,7 @@
 #include "engine.h"
 namespace engine {
 	class WaterFrameBuffers {
-
-		int WinX = 640, WinY = 480;
+		//int WinX = 640, WinY = 480;
 
 		int REFLECTION_WIDTH = 1024;
 		int REFLECTION_HEIGHT = 768;
@@ -45,7 +44,7 @@ namespace engine {
 		}
 		void unbindCurrentFrameBuffer() {//call to switch to default frame buffer
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
-			glViewport(0, 0, WinX, WinY);
+			//glViewport(0, 0, WinX, WinY);
 		}
 
 		int getReflectionTexture() {//get the resulting texture

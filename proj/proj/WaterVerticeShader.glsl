@@ -22,6 +22,7 @@ uniform SharedMatrices
 	vec3 intensities; //a.k.a the color of the light
 	float attenuation; 
 	float ambientCoefficient; 
+	
 };
 
 const float tilling = 1.0; //FIXME: ADJUST TO WATER QUAD SIZE

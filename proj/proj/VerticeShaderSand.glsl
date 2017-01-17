@@ -21,7 +21,7 @@ uniform SharedMatrices
 	vec3 lightPosition;
 	vec3 intensities; //a.k.a the color of the light
 	float attenuation; 
-	float ambientCoefficient; 
+	float ambientCoefficient;
 };
 
 vec4 mod289(vec4 x)
