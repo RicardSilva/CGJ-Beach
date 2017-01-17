@@ -371,7 +371,7 @@ void reshape(int w, int h)
 	glViewport(0, 0, WinX, WinY);
 }
 void update() {
-	variableHeight = ((sin(param*PI / 180)) - 1) / 4;
+	variableHeight = ((sin(param*PI / 180)) - 1) / 8;
 
 	water->setMatrix(matFactory::Translate3(0, variableHeight, 0) *matFactory::Scale3(10, 0.01, 10));
 
