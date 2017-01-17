@@ -92,6 +92,10 @@ void createShaders()
 	Shader *flatSandShader = new CubeShader("VerticeShaderSand.glsl", "FragmentShaderFlatSand.glsl");
 	ShaderManager::Instance()->AddShader("flatSandShader", flatSandShader);
 
+	//rockShader
+	Shader *rockShader = new CubeShader("RockVerticeShader.glsl", "RockFragmentShader.glsl");
+	ShaderManager::Instance()->AddShader("rockShader", rockShader);
+
 	//skybox shader
 	Shader *skyboxShader = new SkyboxShader("SkyboxVerticeShader.glsl", "SkyboxFragmentShader.glsl");
 	ShaderManager::Instance()->AddShader("skyboxShader", skyboxShader);
@@ -135,6 +139,9 @@ void createMeshes() {
 	Mesh* cubeMesh = new Mesh(std::string("cube.obj"));
 	MeshManager::Instance()->AddMesh("cube", cubeMesh);
 
+	Mesh* rockMesh = new Mesh(std::string("rock2.obj"));
+	MeshManager::Instance()->AddMesh("rock", rockMesh);
+
 	Mesh* sandMesh = new Mesh(false);
 	MeshManager::Instance()->AddMesh("sand", sandMesh);
 
@@ -154,7 +161,10 @@ void destroyMeshes() {
 void createMaterials() {
 	Material* cubeMaterial = new Material(std::string("cube.mtl"));
 	MaterialManager::Instance()->AddMaterial("cube", cubeMaterial);
-	checkOpenGLError("ERROR: Could not create meshes.");
+	
+	Material* rockMaterial = new Material(std::string("rock2.mtl"));
+	MaterialManager::Instance()->AddMaterial("rock", rockMaterial);
+
 	Material* sandMaterial = new Material(std::string("sand.mtl"));
 	MaterialManager::Instance()->AddMaterial("sand", sandMaterial);
 	checkOpenGLError("ERROR: Could not create materials.");
@@ -188,7 +198,7 @@ void createScene() {
 	wfbos = new WaterFrameBuffers();
 	scene = new SceneGraph(mainCamera, ShaderManager::Instance()->GetShader("waterShader"));
 
-	SceneNode *root, *cube, *cube2, *sandFlat, *skybox;
+	SceneNode *root, *cube, *cube2, *rock, *rock2, *rock3, *rock32, *rock33, *rock4, *sandFlat, *skybox;
 
 	Texture * skyboxTexture;
 
@@ -221,6 +231,42 @@ void createScene() {
 	cube2->setMesh(MeshManager::Instance()->GetMesh("cube"));
 	cube2->setTexture(TextureManager::Instance()->GetTexture("cat"));
 	root->addNode(cube2);
+
+	rock = new SceneNode();
+	rock->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(2, 0, 40));
+	rock->setShader(ShaderManager::Instance()->GetShader("rockShader"));
+	rock->setMesh(MeshManager::Instance()->GetMesh("rock"));
+	root->addNode(rock);
+
+	rock2 = new SceneNode();
+	rock2->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(-42, -8, 2));
+	rock2->setShader(ShaderManager::Instance()->GetShader("rockShader"));
+	rock2->setMesh(MeshManager::Instance()->GetMesh("rock"));
+	root->addNode(rock2);
+
+	rock3 = new SceneNode();
+	rock3->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(20, 5, -25));
+	rock3->setShader(ShaderManager::Instance()->GetShader("rockShader"));
+	rock3->setMesh(MeshManager::Instance()->GetMesh("rock"));
+	root->addNode(rock3);
+	
+	rock32 = new SceneNode();
+	rock32->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(22, 5, -25)*matFactory::Rotate3(*new vec3(1, 1, 1), -45));
+	rock32->setShader(ShaderManager::Instance()->GetShader("rockShader"));
+	rock32->setMesh(MeshManager::Instance()->GetMesh("rock"));
+	root->addNode(rock32);
+
+	rock33 = new SceneNode();
+	rock33->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(21, 5, -26)*matFactory::Rotate3(*new vec3(1, 1, 1), 90));
+	rock33->setShader(ShaderManager::Instance()->GetShader("rockShader"));
+	rock33->setMesh(MeshManager::Instance()->GetMesh("rock"));
+	root->addNode(rock33);
+
+	rock4 = new SceneNode();
+	rock4->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(18, 5, 23));
+	rock4->setShader(ShaderManager::Instance()->GetShader("rockShader"));
+	rock4->setMesh(MeshManager::Instance()->GetMesh("rock"));
+	root->addNode(rock4);
 
 	sand = new SandSceneNode();
 	sand->setMatrix(matFactory::Scale3(0.1, 0.1, 0.1) *matFactory::Translate3(-50, -2, -50));
