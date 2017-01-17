@@ -40,8 +40,9 @@ void main(void){
 	
 	float waterDepth = floorDistance - waterDistance;
 	
-	vec2 distortedTexCoords = texture(dudvMap, vec2(exTexcoord.x + movementFactor, exTexcoord.y)).rg*0.1;
-	distortedTexCoords = exTexcoord + vec2(distortedTexCoords.x, distortedTexCoords.y+movementFactor);
+
+	vec2 distortedTexCoords = texture(dudvMap, vec2(exTexcoord.x + movementFactor * 10, exTexcoord.y)).rg*0.1;
+	distortedTexCoords = exTexcoord + vec2(distortedTexCoords.x, distortedTexCoords.y+movementFactor * 10);
 	vec2 totalDistortion = (texture(dudvMap, distortedTexCoords).rg * 2.0 - 1.0) * distortionStrength * clamp(waterDepth / 20.0, 0.0, 1.0);
 
 
@@ -53,6 +54,7 @@ void main(void){
 	refractTexCoords = clamp(refractTexCoords, 0.001, 0.999);
 	
 	vec4 reflectColor = texture(ReflectionTexture, reflectTexCoords);
+
   vec4 refractColor = texture(RefractionTexture, refractTexCoords);
 
 	vec4 normalMapColor = texture(normalMap, distortedTexCoords);
@@ -65,10 +67,12 @@ void main(void){
 	
 	vec3 reflectedLight = reflect(normalize(fromLightVector), normal);
 	float specular = max(dot(reflectedLight, viewVector), 0.0);
-	specular = pow(specular, 20.0);
-	vec3 specularHighlights = exintensities * specular * 0.4 * clamp(waterDepth / 20.0, 0.0, 1.0);
+	specular = pow(specular, 20);
+	vec3 specularHighlights = exintensities * 2 * specular * 0.4 * clamp(waterDepth / 20.0, 0.0, 1.0);
 	
 	FragmentColor = mix(reflectColor, refractColor, refractiveFactor);
+	
+	//FragmentColor = refractColor;
 	FragmentColor = mix(FragmentColor, vec4(0.2, 1.0, 1.0, 1.0), 0.2) + vec4(specularHighlights, 1.0);
 	FragmentColor.a = clamp(waterDepth / 5.0, 0.0, 1.0);
 	

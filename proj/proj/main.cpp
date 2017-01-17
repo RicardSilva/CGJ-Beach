@@ -26,6 +26,7 @@ float CameraDistance = 20;
 
 int oldX, oldY;
 bool rotated = false;
+int param = 0;
 
 bool mouseLeftDown;
 bool mouseRightDown;
@@ -168,11 +169,11 @@ void createCameras() {
 	mainCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
 	mainCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 20));
 
-	upCamera = new Camera(vec4(0, -1, 0, 0.5));
+	upCamera = new Camera(vec4(0, -1, 0, 0));
 	upCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
 	upCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 20));
 
-	downCamera = new Camera(vec4(0, 1, 0, 0.5));
+	downCamera = new Camera(vec4(0, 1, 0, 0));
 	downCamera->setViewMatrix(matFactory::Translate3(0, 0, -CameraDistance));
 	downCamera->setProjMatrix(matFactory::PerspectiveProjection(60, (float)WinX / WinY, 0.1f, 20));
 }
@@ -214,7 +215,7 @@ void createScene() {
 	root->addNode(cube);
 
 	cube2 = new SceneNode();
-	cube2->setMatrix(matFactory::Scale3(2, 2, 2) *matFactory::Translate3(-2, 2, -2));
+	cube2->setMatrix(matFactory::Scale3(2, 2, 2) *matFactory::Translate3(-2, 0, -2));
 	cube2->setColor(vec3(0, 1, 0));
 	cube2->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	cube2->setMesh(MeshManager::Instance()->GetMesh("cube"));
@@ -240,7 +241,7 @@ void createScene() {
 
 
 	water = new WaterSceneNode();
-	water->setMatrix(matFactory::Scale3(10, 0, 10));
+	water->setMatrix(matFactory::Scale3(10, 0.1, 10));
 	water->setColor(vec3(1, 1, 0));
 	water->setShader(ShaderManager::Instance()->GetShader("waterShader"));
 	water->setMesh(MeshManager::Instance()->GetMesh("cube"));
@@ -311,7 +312,7 @@ void display()
 
 void idle()
 {
-	glutPostRedisplay();
+	
 }
 
 void reshape(int w, int h)
@@ -321,18 +322,22 @@ void reshape(int w, int h)
 	glViewport(0, 0, WinX, WinY);
 }
 void update() {
-	
+	water->setMatrix(matFactory::Scale3(10, 0.01, 10) *matFactory::Translate3(0, sin (param*PI/180)*10, 0));
+	param++;
+	if (param > 360) param -= 360;
+
 }
 void timer(int value)
 {
 	std::ostringstream oss;
-	oss << CAPTION << ": " << FrameCount << " FPS @ (" << WinX << "x" << WinY << ")";
+	oss << CAPTION << ": " << FrameCount * 60 << " FPS @ (" << WinX << "x" << WinY << ")";
 	std::string s = oss.str();
 	glutSetWindow(WindowHandle);
 	glutSetWindowTitle(s.c_str());
 	FrameCount = 0;
 	update();
-	glutTimerFunc(1000, timer, 0);
+	glutPostRedisplay();
+	glutTimerFunc(16.666, timer, 0);
 }
 
 void screenshotTGA(const std::string& filename)

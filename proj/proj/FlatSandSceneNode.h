@@ -28,7 +28,7 @@ namespace engine {
 			Kd = s->GetUniformLocation("Kd");
 			N = s->GetUniformLocation("Ns");
 			shader->BindTextureUnits();
-			shader->LoadColor(vec3(0.518f, 0.6598f, 0.965f));
+			shader->LoadColor(vec3(0.7255f, 0.8745f, 1.0f));
 			shader->UnUse();
 
 		}
