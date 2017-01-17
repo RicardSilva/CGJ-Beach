@@ -103,13 +103,15 @@ void main(void)
 	vec3 normal = normalize(transpose(inverse(mat3(ModelMatrix))) * exNormal);
     vec3 surfacePos = vec3(ModelMatrix * vec4(exPosition, 1));
     
-	float m = cnoise(surfacePos*50);
+	float m = cnoise(surfacePos*250);
 	
 	
 	float n = (1 + sin(m*5))/2;
 
 	
-	vec4 c = vec4(vec3(0.35,0.3,0.25) * n + vec3(0.35,0.3,0.25)*0.15*(1-n),1); //Rock colors
+	vec4 c = vec4(vec3(0.35,0.3,0.25) * n + vec3(0.35,0.3,0.25)*0.3*(1-n),1); //Rock colors
+	
+	//vec4 c = vec4(vec3(0.9,0.95,0.94) * n + vec3(0.9,0.95,0.94)*0.3*(1-n),1); //Whiter Rock colors
 	
 	//vec4 c = vec4(vec3(0.1,0.9,0.9) * n + vec3(0.1,0.1,0.1)*(1-n),1)/4; //Blue marble?
 	
