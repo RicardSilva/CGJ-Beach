@@ -103,7 +103,7 @@ void main(void)
 	vec3 normal = normalize(transpose(inverse(mat3(ModelMatrix))) * exNormal);
     vec3 surfacePos = vec3(ModelMatrix * vec4(exPosition, 1));
     
-	float m = cnoise(surfacePos*50);
+	float m = cnoise(surfacePos*250);
 	
 	
 	float n = (1 + sin(m*5))/2;
