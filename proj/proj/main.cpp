@@ -218,9 +218,6 @@ void createScene() {
 
 	Texture * skyboxTexture;
 
-	
-
-
 
 	root = new SceneNode();
 	root->setMatrix(matFactory::Identity4());

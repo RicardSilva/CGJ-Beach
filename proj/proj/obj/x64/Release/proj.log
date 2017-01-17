@@ -1,4 +1,4 @@
-﻿Build started 17/01/2017 15:03:39.
+﻿Build started 17/01/2017 15:46:17.
      1>Project "C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\proj.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /I"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\..\dependencies\freeglut\include" /I"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\..\dependencies\glew\include" /I"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\..\dependencies\soil\src" /Zi /nologo /W3 /WX- /sdl /O2 /Oi /GL /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\obj\x64\Release\\" /Fd"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\obj\x64\Release\vc140.pdb" /Gd /TP /errorReport:prompt main.cpp
@@ -12,22 +12,22 @@
      1>c:\users\ricardo silva\documents\github\cgj_teamproject\proj\proj\MeshGenerator.h(144): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
      1>c:\users\ricardo silva\documents\github\cgj_teamproject\proj\proj\Mesh.h(101): warning C4244: '=': conversion from 'int' to 'GLfloat', possible loss of data
      1>c:\users\ricardo silva\documents\github\cgj_teamproject\proj\proj\Mesh.h(102): warning C4244: '=': conversion from 'int' to 'GLfloat', possible loss of data
-     1>main.cpp(245): warning C4305: 'argument': truncation from 'double' to 'float'
-     1>main.cpp(251): warning C4305: 'argument': truncation from 'double' to 'float'
-     1>main.cpp(257): warning C4305: 'argument': truncation from 'double' to 'float'
-     1>main.cpp(263): warning C4305: 'argument': truncation from 'double' to 'float'
-     1>main.cpp(269): warning C4305: 'argument': truncation from 'double' to 'float'
-     1>main.cpp(275): warning C4305: 'argument': truncation from 'double' to 'float'
-     1>main.cpp(281): warning C4305: 'argument': truncation from 'double' to 'float'
-     1>main.cpp(290): warning C4305: 'argument': truncation from 'double' to 'float'
-     1>main.cpp(341): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>main.cpp(242): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>main.cpp(248): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>main.cpp(254): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>main.cpp(260): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>main.cpp(266): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>main.cpp(272): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>main.cpp(278): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>main.cpp(287): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>main.cpp(338): warning C4305: 'argument': truncation from 'double' to 'float'
      1>main.cpp(217): warning C4101: 'cube2': unreferenced local variable
      1>main.cpp(217): warning C4101: 'cube': unreferenced local variable
-     1>main.cpp(431): warning C4305: 'argument': truncation from 'double' to 'float'
-     1>main.cpp(455): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
-     1>main.cpp(469): warning C4838: conversion from 'char' to 'unsigned char' requires a narrowing conversion
-     1>main.cpp(489): warning C4244: 'initializing': conversion from '__int64' to 'unsigned long', possible loss of data
-     1>main.cpp(494): warning C4244: 'initializing': conversion from '__int64' to 'unsigned long', possible loss of data
+     1>main.cpp(428): warning C4305: 'argument': truncation from 'double' to 'float'
+     1>main.cpp(452): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+     1>main.cpp(466): warning C4838: conversion from 'char' to 'unsigned char' requires a narrowing conversion
+     1>main.cpp(486): warning C4244: 'initializing': conversion from '__int64' to 'unsigned long', possible loss of data
+     1>main.cpp(491): warning C4244: 'initializing': conversion from '__int64' to 'unsigned long', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\bin\x64\Release\proj.exe" /NOLOGO /LIBPATH:"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\\..\dependencies\freeglut\lib\x64" /LIBPATH:"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\\..\dependencies\glew\lib\release\x64" /LIBPATH:"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\\..\dependencies\soil\lib" glew32.lib SOIL.lib freeglut.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\bin\x64\Release\proj.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG:incremental /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\bin\x64\Release\proj.lib" /MACHINE:X64 "C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\obj\x64\Release\proj.res"
          "C:\Users\Ricardo Silva\Documents\GitHub\CGJ_TeamProject\proj\proj\\obj\x64\Release\Camera.obj"
@@ -55,4 +55,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.69
+Time Elapsed 00:00:03.28
