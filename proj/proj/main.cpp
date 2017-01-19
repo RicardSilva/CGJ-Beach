@@ -295,35 +295,35 @@ void createScene() {
 	tree->setMesh(MeshManager::Instance()->GetMesh("tree"));
 	tree->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	tree->setTexture(TextureManager::Instance()->GetTexture("trunk"));
-	root->addNode(tree);
+	//root->addNode(tree);
 
 	leafs = new SceneNode(true);
 	leafs->setMatrix(matFactory::Translate3(3, 0.5, -2) * matFactory::Scale3(0.05f, 0.05f, 0.05f));
 	leafs->setMesh(MeshManager::Instance()->GetMesh("leafs"));
 	leafs->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	leafs->setTexture(TextureManager::Instance()->GetTexture("leafs"));
-	root->addNode(leafs);
+	//root->addNode(leafs);
 
 	tree2 = new SceneNode(true);
 	tree2->setMatrix(matFactory::Translate3(2, 0.5, 1) * matFactory::Scale3(0.04f, 0.04f, 0.04f));
 	tree2->setMesh(MeshManager::Instance()->GetMesh("tree"));
 	tree2->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	tree2->setTexture(TextureManager::Instance()->GetTexture("trunk"));
-	root->addNode(tree2);
+	//root->addNode(tree2);
 
 	leafs2 = new SceneNode(true);
 	leafs2->setMatrix(matFactory::Translate3(2, 0.5, 1) * matFactory::Scale3(0.04f, 0.04f, 0.04f));
 	leafs2->setMesh(MeshManager::Instance()->GetMesh("leafs"));
 	leafs2->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	leafs2->setTexture(TextureManager::Instance()->GetTexture("leafs"));
-	root->addNode(leafs2);
+	//root->addNode(leafs2);
 
 	shrub = new SceneNode(true);
 	shrub->setMatrix(matFactory::Translate3(1, 0.25, 2) * matFactory::Scale3(0.04f, 0.04f, 0.04f));
 	shrub->setMesh(MeshManager::Instance()->GetMesh("shrub"));
 	shrub->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	shrub->setTexture(TextureManager::Instance()->GetTexture("trunk"));
-	root->addNode(shrub);
+	//root->addNode(shrub);
 
 	shrubLeafs = new SceneNode(true);
 	shrubLeafs->setMatrix(matFactory::Translate3(1, 0.25, 2) * matFactory::Scale3(0.04f, 0.04f, 0.04f));
@@ -331,7 +331,7 @@ void createScene() {
 	shrubLeafs->setShader(ShaderManager::Instance()->GetShader("cubeShader"));
 	shrubLeafs->setColor(vec3(1.0f, 0.0f, 0.0f));
 	shrubLeafs->setTexture(TextureManager::Instance()->GetTexture("leafs"));
-	root->addNode(shrubLeafs);
+	//root->addNode(shrubLeafs);
 
 	water = new WaterSceneNode();
 	water->setMatrix(matFactory::Scale3(10, 0.1, 20));
@@ -357,12 +357,24 @@ void drawScene()
 	wfbos->bindReflectionFrameBuffer();
 	scene->setCamera(downCamera);
 	scene->draw();
+	tree->draw(matFactory::Identity4());
+	leafs->draw(matFactory::Identity4());
+	tree2->draw(matFactory::Identity4());
+	leafs2->draw(matFactory::Identity4());
+	shrub->draw(matFactory::Identity4());
+	shrubLeafs->draw(matFactory::Identity4());
 	
 
 	//render refraction
 	wfbos->bindRefractionFrameBuffer();
 	scene->setCamera(upCamera);
-	scene->draw();
+	scene->draw(); 
+	tree->draw(matFactory::Identity4());
+	leafs->draw(matFactory::Identity4());
+	tree2->draw(matFactory::Identity4());
+	leafs2->draw(matFactory::Identity4());
+	shrub->draw(matFactory::Identity4());
+	shrubLeafs->draw(matFactory::Identity4());
 
 
 	//render to screen

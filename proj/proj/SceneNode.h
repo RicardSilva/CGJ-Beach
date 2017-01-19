@@ -58,7 +58,6 @@ namespace engine {
 				shader->LoadModelMatrix(modelMatrix * matrix);
 				if (isTree) {
 					glEnable(GL_BLEND);
-					glDepthMask(GL_FALSE);
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				}
 				shader->LoadColor(color);
@@ -75,7 +74,6 @@ namespace engine {
 				shader->UnUse();
 				if (isTree) {
 					glDisable(GL_BLEND);
-					glDepthMask(GL_TRUE);
 				}
 			}
 
